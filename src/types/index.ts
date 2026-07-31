@@ -76,3 +76,12 @@ export interface Mainstate{
         count:number;
     }
 }
+
+export interface CartContentState{
+  content:Array<CartItem>;
+}
+
+export interface CartAction{
+  type:string,
+  payload?:CartItem;
+}
