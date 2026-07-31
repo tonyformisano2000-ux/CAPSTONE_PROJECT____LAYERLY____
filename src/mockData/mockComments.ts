@@ -1,0 +1,51 @@
+import type { Comment } from "../types";
+export const mockComments: Comment[] = [
+  {
+    id: "c1",
+    designId: "d1",
+    userId: "u1",
+    rating: 5,
+    text: "Stampato senza supporti come promesso, resa estetica ottima.",
+    createdAt: "2026-05-20T10:00:00Z",
+  },
+  {
+    id: "c2",
+    designId: "d1",
+    userId: "u3",
+    rating: 4,
+    text: "Bel modello, ho dovuto rallentare la stampa per i dettagli fini.",
+    createdAt: "2026-05-25T15:30:00Z",
+  },
+  {
+    id: "c3",
+    designId: "d2",
+    userId: "u1",
+    rating: 5,
+    text: "Le articolazioni si muovono perfettamente appena tolto dal piatto.",
+    createdAt: "2026-06-10T09:15:00Z",
+  },
+  {
+    id: "c4",
+    designId: "d3",
+    userId: "u2",
+    rating: 3,
+    text: "Buona idea ma servirebbe qualche variante di dimensione in più.",
+    createdAt: "2026-06-18T12:00:00Z",
+  },
+  {
+    id: "c5",
+    designId: "d4",
+    userId: "u2",
+    rating: 4,
+    text: "Il passacavi è un dettaglio molto azzeccato.",
+    createdAt: "2026-07-05T14:20:00Z",
+  },
+  {
+    id: "c6",
+    designId: "d5",
+    userId: "u1",
+    rating: 5,
+    text: "Perfetto per far vedere ai miei studenti come funziona un planetario.",
+    createdAt: "2026-07-22T11:10:00Z",
+  },
+];
