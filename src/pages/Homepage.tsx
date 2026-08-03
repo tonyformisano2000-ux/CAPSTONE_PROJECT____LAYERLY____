@@ -1,4 +1,14 @@
+import CatalogComponent from "../components/HomepageComponents/CatalogComponent"
+import DesignersComponent from "../components/HomepageComponents/DesignersComponent"
+import HeroComponent from "../components/HomepageComponents/HeroComponent"
+
 const Homepage=()=>{
-    return (<h1>Sono in Homepage</h1>)
+    return (
+    <>
+    <HeroComponent/>
+        <CatalogComponent/>
+        <DesignersComponent/>
+        </>
+    )
 }
 export default Homepage
