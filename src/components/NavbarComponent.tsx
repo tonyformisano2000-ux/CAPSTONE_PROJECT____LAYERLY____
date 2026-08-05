@@ -4,10 +4,12 @@ import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-
-function NavScrollExample() {
+import { useSelector } from 'react-redux';
+import type {RootState} from "../redux/store/index"
+function NavbarComponent() {
+  const inTheCart=useSelector((state:RootState)=>state.cart.content)
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar expand="lg" className=" bg-body-ternary">
       <Container fluid>
         <Navbar.Brand href="#">Navbar scroll</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -17,7 +19,7 @@ function NavScrollExample() {
             style={{ maxHeight: '100px' }}
             navbarScroll
           >
-            <i class="bi bi-cart4"></i>
+            
             <Nav.Link href="#action1">Home</Nav.Link>
             <Nav.Link href="#action2">Link</Nav.Link>
             <NavDropdown title="Link" id="navbarScrollingDropdown">
@@ -34,7 +36,8 @@ function NavScrollExample() {
               Link
             </Nav.Link>
           </Nav>
-          <Form className="d-flex">
+          <Form className="d-flex align-items-center">
+            <i className="bi bi-cart4 text-black h5  mx-3 mt-2 position-relative">{inTheCart.length>0 && <p className='position-absolute rounded-circle ms-1 text-white bg-danger top-0 start-50 d-flex justify-content-center' style={{fontSize:"0.5rem", width:"15px", height:"15px" }}>{inTheCart.length}</p> }</i>
             <Form.Control
               type="search"
               placeholder="Search"
@@ -49,4 +52,4 @@ function NavScrollExample() {
   );
 }
 
-export default NavScrollExample;
+export default NavbarComponent;

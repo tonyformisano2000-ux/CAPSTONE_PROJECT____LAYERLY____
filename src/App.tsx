@@ -1,5 +1,4 @@
 import {BrowserRouter, Routes, Route} from 'react-router'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import Homepage from './pages/Homepage'
 import Detail from './pages/Detail'
 import CartPage from './pages/CartPage'

@@ -6,13 +6,13 @@ import "../../generalCss.css"
 
 const CatalogComponent = () => {
   return (
-    <Container>
+    <Container className="my-3">
       <Row>
         {mockDesigns.slice(0, 6).map((design) => {
           const designer = mockUser.find((user) => user.id === design.designerId);
 
           return (
-            <Card key={design.id} className="col-4 p-3 px-1 border-0 overflow-hidden" >
+            <Card key={design.id} className="col-lg-4 col-md-6 p-3 px-1 border-0 overflow-hidden" >
               <Row className="g-0 h-100">
                 <Col className="col-6 h-100">
                   <Card.Img src={design.photoUrls[0]} className="object-fit-cover h-100 w-100" />
@@ -34,7 +34,7 @@ const CatalogComponent = () => {
               </Row>
               <div className="mt-6 d-flex justify-content-between">
 <h6 className="align-self-center">download for {design.price}€</h6>
-<button type="button" className="btn btn-primary btn-sm w-25 align-self-center me-3">See details</button>
+<Link to={`/details/${design.id}`} type="button" className="btn btn-primary btn-sm w-25 align-self-center me-4 rounded-pill" >See details</Link>
               </div>
             </Card>
           );
