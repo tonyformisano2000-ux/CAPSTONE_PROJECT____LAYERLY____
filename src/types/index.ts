@@ -15,7 +15,7 @@ export interface User {
   tags?: string[];
   stripeCustomerId?: string;
   createdAt: string;
-
+designsIds?:string[];
   iban?: string;
   designerLevel?: DesignerLevel;
 }

@@ -6,4 +6,4 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 import {Provider} from "react-redux"
-createRoot(document.getElementById('root')!).render(<Provider store={store}><PersistGate persistor={persistedStore}><App /></PersistGate></Provider> )
+createRoot(document.getElementById('root')!).render(<Provider store={store}><PersistGate persistor={persistedStore}></PersistGate><App /></Provider> )
