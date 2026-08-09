@@ -83,6 +83,6 @@ export interface CartContentState{
 
 export interface CartAction{
   type:string,
-  payload?:CartItem;
+  payload?:string;
 }
 

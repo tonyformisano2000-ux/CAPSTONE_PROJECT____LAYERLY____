@@ -29,7 +29,7 @@ return(
 <h6>Technology: {design.technology}</h6>
     </Row>
     <Row className="my-3 d-flex justify-content-between">
-    <h3>Price: {design.price}€</h3>
+    <h3>Price: {design.price.toFixed(2)}€</h3>
     <Button className="btn btn-lg ">Download</Button>
 
     </Row>

@@ -2,9 +2,15 @@ import { Card, Container, Row, Col } from "react-bootstrap";
 import { mockDesigns } from "../../mockData/mockDesigns";
 import { mockUser } from "../../mockData/mockUsers";
 import { Link } from "react-router";
+import { useSelector } from "react-redux";
 import "../../generalCss.css"
+import type { RootState } from "../../redux/store";
+import { addToCartAction, removeFromCartAction } from "../../redux/actions";
+import { useDispatch } from "react-redux";
 
 const CatalogComponent = () => {
+  const dispatch=useDispatch()
+  const inTheCart=useSelector((state:RootState)=> state.cart.content);
   return (
     <Container className="my-3">
       <Row>
@@ -33,9 +39,13 @@ const CatalogComponent = () => {
                 </Col>
               </Row>
               <div className="mt-6 d-flex justify-content-between">
-<h6 className="align-self-center">download for {design.price}€</h6>
-<Link to={`/details/${design.id}`} type="button" className="btn btn-primary btn-sm w-25 align-self-center me-4 rounded-pill" >See details</Link>
-              </div>
+<h6 className="align-self-center">download for {design.price.toFixed(2)}€</h6>
+<div className="d-flex align-items-center">
+ {inTheCart.some((item)=>item.designId === design.id)?
+ <i className= "btn p-0 border-0 bi bi-plus-circle-fill me-1 fs-4" onClick={()=>dispatch(removeFromCartAction(design.id))}/>:
+ <i className= "btn p-0 border-0 bi bi-plus-circle me-1 fs-4" onClick={()=>dispatch(addToCartAction(design.id))}/>}
+<Link to={`/details/${design.id}`} type="button" className="btn btn-primary btn-sm me-4 rounded-pill" >See details</Link>
+              </div></div>
             </Card>
           );
         })}
