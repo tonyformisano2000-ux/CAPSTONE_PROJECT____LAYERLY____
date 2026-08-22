@@ -1,0 +1,24 @@
+CREATE TABLE designs (
+id BIGSERIAL PRIMARY KEY,
+ title VARCHAR(255) NOT NULL,
+subtitle VARCHAR(255),
+published_at TIMESTAMP NOT NULL,
+designer_id BIGINT NOT NULL REFERENCES users(id),
+technology VARCHAR(255) NOT NULL,
+stl_file_url VARCHAR(255) NOT NULL,
+description TEXT,
+rating DOUBLE PRECISION NOT NULL DEFAULT 0.0,
+ price DOUBLE PRECISION NOT NULL);
+
+CREATE TABLE design_photos (
+ design_id BIGINT NOT NULL REFERENCES designs(id) ON DELETE CASCADE,
+photo_url VARCHAR(255));
+
+CREATE TABLE design_videos (
+design_id BIGINT NOT NULL REFERENCES designs(id) ON DELETE CASCADE,
+video_url VARCHAR(255)
+);
+
+CREATE TABLE design_tags (
+design_id BIGINT NOT NULL REFERENCES designs(id) ON DELETE CASCADE, tag VARCHAR(255)
+);

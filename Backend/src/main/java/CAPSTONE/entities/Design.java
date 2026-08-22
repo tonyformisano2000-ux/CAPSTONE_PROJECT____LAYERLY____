@@ -43,6 +43,12 @@ public class Design {
     @CollectionTable(name = "design_videos", joinColumns = @JoinColumn(name = "design_id"))
     @Column(name = "video_url")
     private List<String> videoUrls;
+
+    @ElementCollection
+    @CollectionTable(name = "design_tags", joinColumns = @JoinColumn(name = "design_id"))
+    @Column(name = "tag")
+    private List<String> tags;
+
     // collection table crea una tavola NON ENTITY, joinColumn crea un rapporto OneToMany per collegare più URLs
     // ad un singolo design e l'annotazione Column indica che ogni elemento della list (finché diversi tra loro) sarà
     // disposto su una riga nuova della table.
@@ -52,11 +58,6 @@ public class Design {
 
     @Column(nullable = false)
     private Double price;
-
-    @ElementCollection
-    @CollectionTable(name = "design_tags", joinColumns = @JoinColumn(name = "design_id"))
-    @Column(name = "tag")
-    private List<String> tags;
 
     public Design() {
     }

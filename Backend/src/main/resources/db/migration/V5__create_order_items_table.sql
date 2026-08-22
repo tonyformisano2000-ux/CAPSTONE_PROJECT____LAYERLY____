@@ -1,0 +1,6 @@
+CREATE TABLE order_items (
+id BIGSERIAL PRIMARY KEY,
+order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+design_id BIGINT NOT NULL REFERENCES designs(id),
+price_at_purchase DOUBLE PRECISION NOT NULL
+);

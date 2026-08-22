@@ -37,10 +37,6 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @ElementCollection
-    @CollectionTable(name = "user_tags", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "tag")
-    private List<String> tags;
 
     // campi popolati solo se role == DESIGNER
     private String iban;
@@ -139,14 +135,6 @@ public class User {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public List<String> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<String> tags) {
-        this.tags = tags;
     }
 
     public String getIban() {

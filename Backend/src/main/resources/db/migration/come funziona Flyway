@@ -1,0 +1,29 @@
+Lo schema di un database (tabelle, colonne, vincoli) cambia nel tempo, esattamente come il codice.
+Ma mentre per il codice c'è Git a tracciare ogni modifica, per il database c'è Flyway:
+se apri pgAdmin oggi, vedi solo "la tabella users ha queste 12 colonne",
+Flyway visualizzerebbe "chi ha aggiunto la colonna iban, quando, e perché", tra i vantaggi ovvi ci sono:
+- Riproducibilità: chiunque clona il tuo repo e avvia l'app ottiene esattamente lo stesso schema;
+- Storia versionata: puoi vedere l'evoluzione del database esattamente come vedi la storia dei commit
+- Sicurezza: Con validate, se il contenuto del DB e quello del codice divergono, l'app si rifiuta di fare modifiche automatiche pericolose
+
+Convenzione di naming da rispettare:
+src/main/resources/db/migration/
+Inizia con V maiuscola
+Numero di versione (1, 2, 3...)
+Doppio underscore __ (non uno solo) prima della descrizione                       ES: "V1__create_users_table.sql"
+Descrizione libera, in snake_case
+Estensione .sql
+
+
+Struttura dei files:
+
+ES:
+CREATE TABLE order_items (
+id BIGSERIAL PRIMARY KEY,
+order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+design_id BIGINT NOT NULL REFERENCES designs(id),
+price_at_purchase DOUBLE PRECISION NOT NULL
+);
+
+ogni ruga è composta da 3 elementi: il nome della colonna, il tipo ed i vincoli
+vincoli impoeranti: PRIMARY KEY (id), REFERENCES (joincolumn) e ON DELETE CASCADE ("se l'id collegato viene eliminato eliminami")

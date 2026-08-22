@@ -1,0 +1,8 @@
+CREATE TABLE comments (
+ id BIGSERIAL PRIMARY KEY,
+design_id BIGINT NOT NULL REFERENCES designs(id) ON DELETE CASCADE,
+    user_id BIGINT NOT NULL REFERENCES users(id),
+    rating INTEGER NOT NULL,
+    text TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL
+);
