@@ -2,10 +2,21 @@ package CAPSTONE.services;
 
 import CAPSTONE.dto.DesignResponseDTO;
 import CAPSTONE.entities.Design;
+import CAPSTONE.entities.User;
+import CAPSTONE.repositories.UserRepository;
 import CAPSTONE.repositories.DesignRepository;
+import CAPSTONE.repositories.UserRepository;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class DesignService {
@@ -52,5 +63,47 @@ public class DesignService {
         dto.setPrice(design.getPrice());
         dto.setTags(design.getTags());
         return dto;
+    }
+    @Autowired
+    private Cloudinary cloudinary;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public DesignResponseDTO createDesign(String title, String subtitle, String technology,
+                                          String description, Double price, List<MultipartFile> photos) {
+        User currentUser = getCurrentAuthenticatedUser();
+
+        List<String> uploadedUrls = photos.stream()
+                .map(this::uploadToCloudinary)
+                .toList();
+
+        Design design = new Design();
+        design.setTitle(title);
+        design.setSubtitle(subtitle);
+        design.setTechnology(technology);
+        design.setDescription(description);
+        design.setPrice(price);
+        design.setPhotoUrls(uploadedUrls);
+        design.setDesigner(currentUser);
+        design.setPublishedAt(LocalDateTime.now());
+        design.setStlFileUrl(""); // TODO: gestione upload STL separata se necessario
+
+        Design saved = designRepository.save(design);
+        return toResponse(saved);
+    }
+
+    private String uploadToCloudinary(MultipartFile file) {
+        try {
+            Map<?, ?> result = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+            return result.get("secure_url").toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to upload image to Cloudinary", e);
+        }
+    }
+
+    private User getCurrentAuthenticatedUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Authenticated user not found"));
     }
 }
