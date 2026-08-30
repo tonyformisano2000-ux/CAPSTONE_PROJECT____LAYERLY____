@@ -3,9 +3,11 @@ import cartReducer from "../reducers/cartReducer"
 import {persistStore, persistReducer, type PersistConfig} from "redux-persist"
 import localStorage from "redux-persist/es/storage"
 import type { CartContentState } from "../../types"
+import authReducer from "../reducers/AuthReducer"
 // ADD NEW REDUCERS HERE 
 const mainReducer= combineReducers({
-    cart: cartReducer
+    cart: cartReducer,
+    auth:authReducer
 })
 
 // __REDUX PERSIST__

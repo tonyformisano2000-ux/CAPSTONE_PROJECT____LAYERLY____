@@ -2,6 +2,7 @@ package CAPSTONE.services;
 
 import CAPSTONE.dto.UserResponseDTO;
 import CAPSTONE.entities.User;
+import CAPSTONE.exceptions.ResourceNotFoundException;
 import CAPSTONE.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class UserService {
 
     public UserResponseDTO getUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
         return toResponse(user);
     }
 

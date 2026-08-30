@@ -3,6 +3,7 @@ package CAPSTONE.services;
 import CAPSTONE.dto.DesignResponseDTO;
 import CAPSTONE.entities.Design;
 import CAPSTONE.entities.User;
+import CAPSTONE.exceptions.ResourceNotFoundException;
 import CAPSTONE.repositories.UserRepository;
 import CAPSTONE.repositories.DesignRepository;
 import CAPSTONE.repositories.UserRepository;
@@ -33,7 +34,7 @@ public class DesignService {
 
     public DesignResponseDTO getDesignById(Long id) {
         Design design = designRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Design not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Design not found with id: " + id));
         return toResponse(design);
     }
 
@@ -98,12 +99,12 @@ public class DesignService {
             Map<?, ?> result = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
             return result.get("secure_url").toString();
         } catch (IOException e) {
-            throw new RuntimeException("Failed to upload image to Cloudinary", e);
+            throw new ResourceNotFoundException("Failed to upload image to Cloudinary");
         }
     }
 
     private User getCurrentAuthenticatedUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("Authenticated user not found"));
+        return userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("Authenticated user not found"));
     }
 }

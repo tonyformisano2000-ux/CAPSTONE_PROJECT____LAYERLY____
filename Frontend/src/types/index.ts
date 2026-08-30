@@ -86,3 +86,27 @@ export interface CartAction{
   payload?:string;
 }
 
+export interface AuthState {
+  token: string | null;
+  user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    role: UserRole;
+  } | null;
+}
+
+export interface AuthAction {
+  type: string;
+  payload?: { token: string; user: AuthState['user'] };
+}
+
+export interface RootState {
+  cart: CartContentState;
+  auth: AuthState;
+  _persist: {
+    version: number;
+    rehydrated: boolean;
+  };
+}

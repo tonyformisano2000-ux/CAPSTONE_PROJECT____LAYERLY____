@@ -1,16 +1,18 @@
 import { mockDesigns } from "../../mockData/mockDesigns";
 import type { CartAction, CartContentState } from "../../types";
 import { ADD_TO_CART, REMOVE_FROM_CART, EMPTY_CART } from "../actions";
+
 const initialState:CartContentState={
     content:[]
 }
 
-const cartReducer=(cartState=initialState, cartAction:CartAction)=>{
+const cartReducer=(cartState=initialState, cartAction:CartAction):CartContentState=>{
 switch(cartAction.type){
     // ADD NEW DESIGN TO SAVED ARRAY 
 case ADD_TO_CART: {
 if (!cartAction.payload || cartState.content.some((cartItem)=>cartItem.designId===cartAction.payload)) return cartState;
 const design= mockDesigns.find((item)=>item.id===cartAction.payload)
+if(!design) return cartState;
 return {...cartState,
     content: [...cartState.content, {designId:design?.id, priceSnapshot:design?.price}]}}
     // REMOVE DESIGN FROM SAVED ARRAY

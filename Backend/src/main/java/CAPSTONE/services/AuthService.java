@@ -6,6 +6,9 @@ import CAPSTONE.dto.RegisterRequest;
 import CAPSTONE.dto.UserResponseDTO;
 import CAPSTONE.entities.User;
 import CAPSTONE.enums.UserRole;
+import CAPSTONE.exceptions.DuplicateEmailException;
+import CAPSTONE.exceptions.InvalidCredentialsException;
+import CAPSTONE.exceptions.ResourceNotFoundException;
 import CAPSTONE.repositories.UserRepository;
 import CAPSTONE.security.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +31,7 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already in use: " + request.getEmail());
+            throw new DuplicateEmailException("Email already in use: " + request.getEmail());
         }
 
         User user = new User();
@@ -47,10 +50,10 @@ public class AuthService {
 
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+                .orElseThrow(() -> new InvalidCredentialsException("Invalid email or password"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            throw new RuntimeException("Invalid email or password");
+            throw new ResourceNotFoundException("Invalid email or password");
         }
 
         String token = jwtUtils.generateToken(user.getEmail());

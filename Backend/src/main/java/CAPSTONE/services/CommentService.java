@@ -4,6 +4,7 @@ import CAPSTONE.dto.CommentResponseDTO;
 import CAPSTONE.entities.Comment;
 import CAPSTONE.entities.Design;
 import CAPSTONE.entities.User;
+import CAPSTONE.exceptions.ResourceNotFoundException;
 import CAPSTONE.repositories.CommentRepository;
 import CAPSTONE.repositories.DesignRepository;
 import CAPSTONE.repositories.UserRepository;
@@ -34,9 +35,9 @@ public class CommentService {
 
     public CommentResponseDTO createComment(Long designId, Long userId, Integer rating, String text) {
         Design design = designRepository.findById(designId)
-                .orElseThrow(() -> new RuntimeException("Design not found with id: " + designId));
+                .orElseThrow(() -> new ResourceNotFoundException("Design not found with id: " + designId));
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
         Comment comment = new Comment();
         comment.setDesign(design);
@@ -51,7 +52,7 @@ public class CommentService {
         return toResponse(saved);
     }
 
-    private void recalculateDesignRating(Design design) {
+     void recalculateDesignRating(Design design) {
         List<Comment> comments = commentRepository.findByDesignId(design.getId());
         double average = comments.stream()
                 .mapToInt(Comment::getRating)

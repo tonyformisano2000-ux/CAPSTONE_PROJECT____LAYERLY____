@@ -2,7 +2,10 @@ import { Button, Col, Form } from "react-bootstrap";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import apiFetch  from "../../api/apiClient";
+import { loginSuccessAction } from "../../redux/actions/authActions";
 interface RegisterProps {
   modeSetter: () => void;
 }
@@ -21,15 +24,30 @@ const registerZod = z
   });
 
 type registerFormData = z.infer<typeof registerZod>;
-
 const RegisterMode = ({ modeSetter }: RegisterProps) => {
+   const dispatch=useDispatch()
+ const navigate=useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm<registerFormData>({
     resolver: zodResolver(registerZod),
   });
 
-  const onSubmit = (data: registerFormData) => {
-    // TODO fetch
-    console.log(data);
+  const onSubmit = async (data: registerFormData) => {
+   try {
+    const result = await apiFetch('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: data.pw,
+        role: 'CUSTOMER', 
+      }),
+    });
+    dispatch(loginSuccessAction(result.token, result.user));
+    navigate('/');
+  } catch (err) {
+    console.error(err);
+  }
   };
 
   return (

@@ -3,6 +3,7 @@ package CAPSTONE.services;
 import CAPSTONE.dto.OrderResponseDTO;
 import CAPSTONE.entities.*;
 import CAPSTONE.enums.OrderStatus;
+import CAPSTONE.exceptions.ResourceNotFoundException;
 import CAPSTONE.repositories.DesignRepository;
 import CAPSTONE.repositories.OrderItemRepository;
 import CAPSTONE.repositories.OrderRepository;
@@ -37,11 +38,11 @@ public class OrderService {
 
     public OrderResponseDTO createOrder(Long customerId, List<Long> designIds) {
         User customer = userRepository.findById(customerId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + customerId));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + customerId));
 
         List<Design> designs = designIds.stream()
                 .map(id -> designRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Design not found with id: " + id)))
+                        .orElseThrow(() -> new ResourceNotFoundException("Design not found with id: " + id)))
                 .toList();
 
         double total = designs.stream()

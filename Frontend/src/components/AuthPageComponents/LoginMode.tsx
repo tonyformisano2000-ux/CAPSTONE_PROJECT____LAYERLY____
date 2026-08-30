@@ -2,7 +2,10 @@ import { Button, Col, Form,} from "react-bootstrap"
 import {z} from "zod"
 import {useForm} from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import apiFetch  from "../../api/apiClient";
+import  {loginSuccessAction}  from "../../redux/actions/authActions";
 interface LoginProps{
 modeSetter:()=>void;
 }
@@ -18,10 +21,20 @@ type loginFormData=z.infer<typeof loginZod>
 
 const LoginMode=({modeSetter}:LoginProps)=>{
     const {register, handleSubmit, formState:{errors}}=useForm<loginFormData>({resolver:zodResolver(loginZod)})
+const dispatch=useDispatch();
+const navigate=useNavigate();
 
-const onSubmit = (data:loginFormData)=>{
-    //TODO fetch
-    console.log(data)
+  const onSubmit = async (data: loginFormData) => {
+  try {
+    const result = await apiFetch('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email: data.email, password: data.pw }),
+    });
+    dispatch(loginSuccessAction(result.token, result.user));
+    navigate('/');
+  } catch (err) {
+    console.error(err);
+  }
 }
 
     return(
