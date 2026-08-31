@@ -2,7 +2,6 @@ import{combineReducers, configureStore} from "@reduxjs/toolkit"
 import cartReducer from "../reducers/cartReducer"
 import {persistStore, persistReducer, type PersistConfig} from "redux-persist"
 import localStorage from "redux-persist/es/storage"
-import type { CartContentState } from "../../types"
 import authReducer from "../reducers/AuthReducer"
 // ADD NEW REDUCERS HERE 
 const mainReducer= combineReducers({
@@ -25,10 +24,3 @@ const store= configureStore({
 const persistedStore=persistStore(store)
 
 export {store, persistedStore}
-export interface RootState {
-  cart: CartContentState;
-  _persist: {
-    version: number;
-    rehydrated: boolean;
-  };
-}

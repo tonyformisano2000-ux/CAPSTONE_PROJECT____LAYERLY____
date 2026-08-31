@@ -1,20 +1,24 @@
+import { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
-import { Link } from "react-router";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
-import type { RootState } from "../redux/store";
-import { emptyCartAction } from "../redux/actions";
-import { mockDesigns } from "../mockData/mockDesigns";
+import { Link, useLocation } from "react-router";
+import apiFetch from "../api/apiClient";
+import type { Design, CartItem } from "../types";
 
 const OrderConfirmationPage = () => {
-  const content = useSelector((state: RootState) => state.cart.content);
-  const dispatch = useDispatch();
+  const location = useLocation();
+  const items = (location.state?.items ?? []) as CartItem[];
+  const [designs, setDesigns] = useState<Design[]>([]);
 
-  const total = content.reduce((sum, item) => sum + item.priceSnapshot, 0);
+  const total = items.reduce((sum, item) => sum + item.priceSnapshot, 0);
   const orderId = 123456; // placeholder, real id will come from backend
 
   useEffect(() => {
-    dispatch(emptyCartAction());
+    if (items.length === 0) return;
+    apiFetch('/designs')
+      .then((all: Design[]) => {
+        setDesigns(all.filter((d) => items.some((i) => i.designId === d.id)));
+      })
+      .catch((err) => console.error(err));
   }, []);
 
   return (
@@ -27,12 +31,12 @@ const OrderConfirmationPage = () => {
       </p>
 
       <div className="border rounded p-3 my-4 text-start">
-        {content.length === 0 ? (
+        {items.length === 0 ? (
           <p className="text-muted mb-0">No details available.</p>
         ) : (
           <>
-            {content.map((item) => {
-              const design = mockDesigns.find((d) => d.id === item.designId);
+            {items.map((item) => {
+              const design = designs.find((d) => d.id === item.designId);
               return (
                 <div key={item.designId} className="d-flex justify-content-between mb-2">
                   <span>{design?.title ?? "Design"}</span>

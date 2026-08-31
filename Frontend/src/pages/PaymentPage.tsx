@@ -3,9 +3,12 @@ import { Form, Button } from "react-bootstrap"
 import {useForm} from "react-hook-form"
 import {z} from "zod"
 import {zodResolver} from "@hookform/resolvers/zod"
-import { useSelector} from "react-redux"
-import type { RootState } from "../redux/store"
+import { useSelector,useDispatch } from "react-redux"
+import type { RootState} from "../types/index"
 import { mockDesigns } from "../mockData/mockDesigns"
+import { useNavigate } from "react-router";
+import apiFetch from "../api/apiClient";
+import { emptyCartAction } from "../redux/actions";
 
 const paymentZod=z.object({
     fullName: z.string().min(2, "At least 2 characters must be entered").trim().nonempty("At least 2 characters must be entered"),
@@ -18,6 +21,9 @@ const paymentZod=z.object({
 })
 
 const PaymentPage =()=>{
+  const dispatch = useDispatch();
+const navigate = useNavigate();
+const content = useSelector((state: RootState) => state.cart.content);
 const cart=useSelector((state:RootState)=>state.cart.content)
 const total=cart.reduce((sum,item)=>sum + item.priceSnapshot,0)
     type PaymentFormData=z.infer<typeof paymentZod>;
@@ -26,9 +32,23 @@ const total=cart.reduce((sum,item)=>sum + item.priceSnapshot,0)
 // doppio deconstructor, dallggetto useForm prendi formState e da formstate prendi errors 
 
 
-    const onSubmit = (data:PaymentFormData) => {
-    console.log(data); //TODO: FARE LA FETCH
-  };
+  const onSubmit = async (data: PaymentFormData) => {
+  console.log('Payment form submitted (mock):', data);
+  try {
+    const designIds = content.map((item) => item.designId);
+    const orderedItems = [...content]; 
+
+    await apiFetch('/orders', {
+      method: 'POST',
+      body: JSON.stringify({ designIds }),
+    });
+
+    dispatch(emptyCartAction());
+    navigate('/orderConfirmation', { state: { items: orderedItems } });
+  } catch (err) {
+    console.error(err);
+  }
+};
     return (
     <>
     <Container>

@@ -1,16 +1,13 @@
 import { Container, Row, Col, Form, Button, Image } from "react-bootstrap";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { mockUser } from "../mockData/mockUsers";
-import { mockDesigns } from "../mockData/mockDesigns";
+import apiFetch, { apiUpload } from "../api/apiClient";
+import type { RootState, Order } from "../types";
 
 type ProfileSection = "info" | "publish" | "history";
-
-// MOCK TEMPORANEO: utente loggato finto, in attesa dell'auth reale
-const currentUser = mockUser[0];
-const mockPurchasedIds = ["d2", "d4"]; // stesso mock di LibraryPage, da unificare col backend
 
 const MAX_PHOTOS = 8;
 
@@ -30,9 +27,11 @@ const publishSchema = z.object({
 type PublishFormData = z.infer<typeof publishSchema>;
 
 const ProfilePage = () => {
+  const currentUser = useSelector((state: RootState) => state.auth.user);
   const [section, setSection] = useState<ProfileSection>("info");
   const [photos, setPhotos] = useState<File[]>([]);
-  const editIndexRef = useRef<number | null>(null); // se stiamo sostituendo una foto esistente, tiene traccia di quale indice
+  const [orders, setOrders] = useState<Order[]>([]);
+  const editIndexRef = useRef<number | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -42,9 +41,9 @@ const ProfilePage = () => {
   } = useForm<InfoFormData>({
     resolver: zodResolver(infoSchema),
     defaultValues: {
-      firstName: currentUser.firstName,
-      lastName: currentUser.lastName,
-      location: currentUser.location ?? "",
+      firstName: currentUser?.firstName ?? "",
+      lastName: currentUser?.lastName ?? "",
+      location: "",
     },
   });
 
@@ -56,12 +55,32 @@ const ProfilePage = () => {
     resolver: zodResolver(publishSchema),
   });
 
+  useEffect(() => {
+    if (!currentUser) return;
+    apiFetch(`/orders/customer/${currentUser.id}`)
+      .then(setOrders)
+      .catch((err) => console.error(err));
+  }, [currentUser]);
+
   const onSaveInfo = (data: InfoFormData) => {
-    console.log(data); // TODO: fetch di aggiornamento profilo
+    console.log(data); // TODO: endpoint di aggiornamento profilo non ancora implementato lato backend
   };
 
-  const onPublishDesign = (data: PublishFormData) => {
-    console.log(data, photos); // TODO: fetch di creazione design (multipart, con i file)
+  const onPublishDesign = async (data: PublishFormData) => {
+    try {
+      const formData = new FormData();
+      formData.append('title', data.title);
+      if (data.description) formData.append('description', data.description);
+      formData.append('technology', data.technology);
+      formData.append('price', data.price.toString());
+      photos.forEach((photo) => formData.append('photos', photo));
+
+      await apiUpload('/designs', formData);
+      setPhotos([]);
+      alert('Design published!');
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const openFilePicker = (indexToReplace: number | null = null) => {
@@ -76,24 +95,28 @@ const ProfilePage = () => {
     const replaceIndex = editIndexRef.current;
 
     if (replaceIndex !== null) {
-      // stiamo sostituendo una foto esistente a quell'indice
       const updated = [...photos];
       updated[replaceIndex] = file;
       setPhotos(updated);
     } else {
-      // aggiunta di una nuova foto
       setPhotos([...photos, file]);
     }
 
     editIndexRef.current = null;
-    e.target.value = ""; // reset input, permette di riselezionare lo stesso file due volte di fila
+    e.target.value = "";
   };
 
   const handleRemovePhoto = (indexToRemove: number) => {
     setPhotos(photos.filter((_, index) => index !== indexToRemove));
   };
 
-  const purchasedDesigns = mockDesigns.filter((design) => mockPurchasedIds.includes(design.id));
+  if (!currentUser) {
+    return (
+      <Container className="mt-5">
+        <h1>You must be logged in to view this page.</h1>
+      </Container>
+    );
+  }
 
   return (
     <Container className="mt-4">
@@ -101,7 +124,6 @@ const ProfilePage = () => {
         <Col md={3}>
           <div className="d-flex flex-column align-items-center mb-4">
             <Image
-              src={currentUser.profilePhotoUrl}
               roundedCircle
               style={{ width: "64px", height: "64px", objectFit: "cover" }}
               className="mb-2"
@@ -165,7 +187,6 @@ const ProfilePage = () => {
             <>
               <h2 className="h4 mb-3">Publish a new design</h2>
 
-              {/* input file nativo, nascosto, condiviso da tutte le card */}
               <Form.Control
                 ref={fileInputRef}
                 type="file"
@@ -245,13 +266,13 @@ const ProfilePage = () => {
           {section === "history" && (
             <>
               <h2 className="h4 mb-3">Purchase history</h2>
-              {purchasedDesigns.length === 0 ? (
+              {orders.length === 0 ? (
                 <p className="text-muted">No purchases yet.</p>
               ) : (
-                purchasedDesigns.map((design) => (
-                  <div key={design.id} className="d-flex justify-content-between border-bottom py-2">
-                    <span>{design.title}</span>
-                    <span className="text-muted">{design.price.toFixed(2)} €</span>
+                orders.map((order) => (
+                  <div key={order.id} className="d-flex justify-content-between border-bottom py-2">
+                    <span>Order #{order.id} ({order.status})</span>
+                    <span className="text-muted">{order.total.toFixed(2)} €</span>
                   </div>
                 ))
               )}

@@ -4,19 +4,25 @@ import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { DropdownButton } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import type { RootState } from "../redux/store/index";
+import { useSelector, useDispatch } from 'react-redux';
+import type { RootState } from "../types/index";
 import { useNavigate } from "react-router";
 import Layerly_logo from "../assets/LAYERLY_logo.png";
 import simpleUser from "../assets/Sample_User_Icon.png";
-
+import { logoutAction } from "../redux/actions/authActions";
 function NavbarComponent() {
   const logoURL = Layerly_logo;
   const navigate = useNavigate();
   const inTheCart = useSelector((state: RootState) => state.cart.content);
+const token = useSelector((state: RootState) => state.auth.token);
+const user = useSelector((state: RootState) => state.auth.user);
+const isLoggedIn = !!token;
+const dispatch = useDispatch();
 
-  // MOCK TEMPORANEO: sostituire con lo stato di autenticazione reale
-  const isLoggedIn = false;
+const handleLogout = () => {
+  dispatch(logoutAction());
+  navigate('/');
+};
 
   return (
     <Navbar expand="lg" className="bg-body-tertinary">
@@ -49,12 +55,14 @@ function NavbarComponent() {
             <DropdownButton
               align="end"
               title={
+                <>
                 <img
                   src={simpleUser}
                   alt='userIcon'
                   className='rounded-circle bg-secondary-subtle border border-secondary border-3'
                   style={{ height: "30px", width: "auto" }}
                 />
+                 {user && <span className="ms-2 small">{user.firstName}</span>}</>
               }
               id="navbarScrollingDropdown"
               variant='white'
@@ -63,6 +71,7 @@ function NavbarComponent() {
               <Dropdown.Item onClick={() => navigate("/library")}>My Library</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item disabled>Business (coming soon!)</Dropdown.Item>
+              <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
             </DropdownButton>
           ) : (
             <Button className='border border-danger bg-white text-danger' onClick={() => navigate("/login")}>

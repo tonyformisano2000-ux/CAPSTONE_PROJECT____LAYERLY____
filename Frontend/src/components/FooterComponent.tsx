@@ -1,4 +1,3 @@
-// components/FooterComponent.tsx
 import { Container } from 'react-bootstrap';
 
 const FooterComponent = () => {

@@ -1,11 +1,28 @@
+import { useState, useEffect } from "react";
 import { Container, Row, Col, Badge } from "react-bootstrap";
 import { useParams, Link } from "react-router";
-import { mockUser } from "../mockData/mockUsers";
-import { mockDesigns } from "../mockData/mockDesigns";
+import apiFetch from "../api/apiClient";
+import type { Design, User } from "../types";
 
 const DesignerPage = () => {
   const { id } = useParams();
-  const designer = mockUser.find((user) => user.id === id);
+  const [designer, setDesigner] = useState<User | null>(null);
+  const [designerDesigns, setDesignerDesigns] = useState<Design[]>([]);
+
+  useEffect(() => {
+    if (!id) return;
+
+    apiFetch(`/users/${id}`)
+      .then(setDesigner)
+      .catch((err) => console.error(err));
+
+    apiFetch('/designs')
+      .then((allDesigns: Design[]) => {
+        const filtered = allDesigns.filter((d) => d.designerId === id).slice(0, 6);
+        setDesignerDesigns(filtered);
+      })
+      .catch((err) => console.error(err));
+  }, [id]);
 
   if (!designer) {
     return (
@@ -14,10 +31,6 @@ const DesignerPage = () => {
       </Container>
     );
   }
-
-  const designerDesigns = mockDesigns
-    .filter((design) => design.designerId === designer.id)
-    .slice(0, 6);
 
   return (
     <Container className="px-0">
@@ -56,30 +69,12 @@ const DesignerPage = () => {
                   {designer.location}
                 </span>
               )}
-              <span>
-                <i className="bi bi-calendar3 me-1"></i>
-                su Layerly da{" "}
-                {new Date(designer.createdAt).toLocaleDateString("it-IT", {
-                  month: "long",
-                  year: "numeric",
-                })}
-              </span>
               {designer.designerLevel && (
                 <Badge bg={designer.designerLevel === "PROFESSIONAL" ? "primary" : "secondary"}>
                   {designer.designerLevel === "PROFESSIONAL" ? "Designer professionale" : "Designer amatoriale"}
                 </Badge>
               )}
             </div>
-
-            {designer.tags && designer.tags.length > 0 && (
-              <div className="d-flex flex-wrap gap-2 mt-2">
-                {designer.tags.map((tag) => (
-                  <span key={tag} className="badge bg-light text-dark border">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
           </div>
         </Container>
       </div>

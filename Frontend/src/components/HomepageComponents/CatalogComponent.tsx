@@ -1,21 +1,28 @@
 import { Card, Container, Row, Col } from "react-bootstrap";
-import { mockDesigns } from "../../mockData/mockDesigns";
-import { mockUser } from "../../mockData/mockUsers";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
 import "../../generalCss.css"
-import type { RootState } from "../../redux/store";
+import type { RootState } from "../../types/index";
 import { addToCartAction, removeFromCartAction } from "../../redux/actions";
 import { useDispatch } from "react-redux";
-
+import { useState, useEffect } from "react";
+import apiFetch from "../../api/apiClient";
+import type { Design } from "../../types";
 const CatalogComponent = () => {
   const dispatch=useDispatch()
   const inTheCart=useSelector((state:RootState)=> state.cart.content);
+  const [designs, setDesigns] = useState<Design[]>([]);
+
+  useEffect(() => {
+    apiFetch('/designs')
+      .then(setDesigns)
+      .catch((err) => console.error(err));
+  }, []);
+
   return (
     <Container className="my-3">
       <Row>
-        {mockDesigns.slice(0, 6).map((design) => {
-          const designer = mockUser.find((user) => user.id === design.designerId);
+        {designs.slice(0, 6).map((design) => {
 
           return (
             <Card key={design.id} className="col-lg-4 col-md-6 p-3 px-1 border-0 overflow-hidden" >
@@ -28,7 +35,7 @@ const CatalogComponent = () => {
                     <Card.Title>{design.title}</Card.Title>
 
                     <Link to={`/designer/${design.designerId}`} className="text-decoration-none">
-                      {designer?.firstName} {designer?.lastName}
+                      {design.designerName}
                     </Link>
                     <div className="text-muted small">
                       {new Date(design.publishedAt).toLocaleDateString('it-IT')}

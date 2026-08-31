@@ -1,12 +1,12 @@
-import type { Design, User} from "../../types";
+import type { Design} from "../../types";
 import { Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router";
-interface DesignDesignerProp{
-  design:Design;
-    designer:User;
+
+interface DesignProp {
+  design: Design;
 }
 
-const InfoDetailComponent=({design, designer}:DesignDesignerProp)=>{
+const InfoDetailComponent = ({ design }: DesignProp) => {
     const published=design.publishedAt.split("-")
 return(
     <>
@@ -17,8 +17,7 @@ return(
     <h6>rated {design.rating}/5 </h6>
     </Col>
 <Col className="col-8 d-flex justify-content-end align-middle">
-    <span className="h6 text-nowrap">published on {published[1]}/{published[0]} by -</span><Link to={`/designer/${designer.id}`} className="text-decoration-none text-nowrap" >{designer.firstName} {designer.lastName} <img src={designer.profilePhotoUrl} alt="Designer photo" className="rounded-circle" style={{height:"23px", width:"auto"}}/></Link>
-    {designer.designerLevel==="PROFESSIONAL" && <p className="fw-bold">PRO</p>}
+    <span className="h6 text-nowrap">published on {published[1]}/{published[0]} by -</span><Link to={`/designer/${design.designerId}`} className="text-decoration-none text-nowrap" >{design.designerName}</Link>
     </Col></Row>
     <Row className="my-4">
         <h5>{design.subtitle}</h5>

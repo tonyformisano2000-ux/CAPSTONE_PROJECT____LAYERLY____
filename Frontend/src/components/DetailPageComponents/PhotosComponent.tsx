@@ -28,6 +28,4 @@ onClick={()=>{setCurrentImg(photoURL)}} />
 </Row></>
     )
 }
-// stlFileUrl: string;
-// videoUrls?: string[];
 export default PhotoComponent

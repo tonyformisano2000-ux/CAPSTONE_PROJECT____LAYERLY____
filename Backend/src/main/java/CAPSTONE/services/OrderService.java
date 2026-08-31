@@ -9,6 +9,7 @@ import CAPSTONE.repositories.OrderItemRepository;
 import CAPSTONE.repositories.OrderRepository;
 import CAPSTONE.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,9 +37,8 @@ public class OrderService {
                 .toList();
     }
 
-    public OrderResponseDTO createOrder(Long customerId, List<Long> designIds) {
-        User customer = userRepository.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + customerId));
+    public OrderResponseDTO createOrder(List<Long> designIds) {
+        User customer = getCurrentAuthenticatedUser();
 
         List<Design> designs = designIds.stream()
                 .map(id -> designRepository.findById(id)
@@ -51,7 +51,7 @@ public class OrderService {
 
         Order order = new Order();
         order.setCustomer(customer);
-        order.setStatus(OrderStatus.PENDING);
+        order.setStatus(OrderStatus.PAID); // pagamento simulato, come deciso — non PENDING
         order.setTotal(total);
         order.setCreatedAt(LocalDateTime.now());
         Order savedOrder = orderRepository.save(order);
@@ -65,6 +65,12 @@ public class OrderService {
         }
 
         return toResponse(savedOrder);
+    }
+
+    private User getCurrentAuthenticatedUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Authenticated user not found"));
     }
 
     private OrderResponseDTO toResponse(Order order) {

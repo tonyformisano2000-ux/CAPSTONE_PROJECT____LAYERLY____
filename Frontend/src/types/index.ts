@@ -34,6 +34,7 @@ export interface Design {
   rating: number; // 1-5
   price: number;
   tags: string[];
+  designerName: string;
 }
 
 export interface Comment {

@@ -21,15 +21,12 @@ public class OrderController {
 
     @PostMapping
     public OrderResponseDTO createOrder(@RequestBody CreateOrderRequest request) {
-        return orderService.createOrder(request.getCustomerId(), request.getDesignIds());
+        return orderService.createOrder(request.getDesignIds());
     }
 
     public static class CreateOrderRequest {
-        private Long customerId;
         private List<Long> designIds;
 
-        public Long getCustomerId() { return customerId; }
-        public void setCustomerId(Long customerId) { this.customerId = customerId; }
         public List<Long> getDesignIds() { return designIds; }
         public void setDesignIds(List<Long> designIds) { this.designIds = designIds; }
     }
