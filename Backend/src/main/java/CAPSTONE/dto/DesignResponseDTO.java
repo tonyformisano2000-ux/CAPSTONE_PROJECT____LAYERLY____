@@ -28,4 +28,4 @@ public class DesignResponseDTO {
     private Double price;
     private List<String> tags;
 
-    }
+}

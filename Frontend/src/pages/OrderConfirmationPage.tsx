@@ -14,7 +14,7 @@ const OrderConfirmationPage = () => {
 
   useEffect(() => {
     if (items.length === 0) return;
-    apiFetch('/designs')
+    apiFetch("/designs")
       .then((all: Design[]) => {
         setDesigns(all.filter((d) => items.some((i) => i.designId === d.id)));
       })
@@ -23,7 +23,10 @@ const OrderConfirmationPage = () => {
 
   return (
     <Container className="text-center mt-5" style={{ maxWidth: "500px" }}>
-      <i className="bi bi-check-circle-fill text-success" style={{ fontSize: "64px" }}></i>
+      <i
+        className="bi bi-check-circle-fill text-success"
+        style={{ fontSize: "64px" }}
+      ></i>
 
       <h1 className="mt-3">Order confirmed</h1>
       <p className="text-muted">
@@ -38,7 +41,10 @@ const OrderConfirmationPage = () => {
             {items.map((item) => {
               const design = designs.find((d) => d.id === item.designId);
               return (
-                <div key={item.designId} className="d-flex justify-content-between mb-2">
+                <div
+                  key={item.designId}
+                  className="d-flex justify-content-between mb-2"
+                >
                   <span>{design?.title ?? "Design"}</span>
                   <span>{item.priceSnapshot.toFixed(2)} €</span>
                 </div>

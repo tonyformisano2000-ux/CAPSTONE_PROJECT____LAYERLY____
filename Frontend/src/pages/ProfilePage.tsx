@@ -69,15 +69,15 @@ const ProfilePage = () => {
   const onPublishDesign = async (data: PublishFormData) => {
     try {
       const formData = new FormData();
-      formData.append('title', data.title);
-      if (data.description) formData.append('description', data.description);
-      formData.append('technology', data.technology);
-      formData.append('price', data.price.toString());
-      photos.forEach((photo) => formData.append('photos', photo));
+      formData.append("title", data.title);
+      if (data.description) formData.append("description", data.description);
+      formData.append("technology", data.technology);
+      formData.append("price", data.price.toString());
+      photos.forEach((photo) => formData.append("photos", photo));
 
-      await apiUpload('/designs', formData);
+      await apiUpload("/designs", formData);
       setPhotos([]);
-      alert('Design published!');
+      alert("Design published!");
     } catch (err) {
       console.error(err);
     }
@@ -163,18 +163,30 @@ const ProfilePage = () => {
           {section === "info" && (
             <>
               <h2 className="h4 mb-3">Personal info</h2>
-              <Form onSubmit={handleSubmitInfo(onSaveInfo)} style={{ maxWidth: "400px" }}>
+              <Form
+                onSubmit={handleSubmitInfo(onSaveInfo)}
+                style={{ maxWidth: "400px" }}
+              >
                 <Form.Group className="mb-3" controlId="firstName">
                   <Form.Label>First name</Form.Label>
-                  <Form.Control {...registerInfo("firstName")} isInvalid={!!infoErrors.firstName} />
+                  <Form.Control
+                    {...registerInfo("firstName")}
+                    isInvalid={!!infoErrors.firstName}
+                  />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="lastName">
                   <Form.Label>Last name</Form.Label>
-                  <Form.Control {...registerInfo("lastName")} isInvalid={!!infoErrors.lastName} />
+                  <Form.Control
+                    {...registerInfo("lastName")}
+                    isInvalid={!!infoErrors.lastName}
+                  />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="location">
                   <Form.Label>Location</Form.Label>
-                  <Form.Control {...registerInfo("location")} isInvalid={!!infoErrors.location} />
+                  <Form.Control
+                    {...registerInfo("location")}
+                    isInvalid={!!infoErrors.location}
+                  />
                 </Form.Group>
                 <Button type="submit" variant="primary">
                   Save changes
@@ -211,7 +223,10 @@ const ProfilePage = () => {
 
                 {photos.map((photo, index) => (
                   <Col xs={3} key={index}>
-                    <div className="border rounded overflow-hidden" style={{ height: "100px" }}>
+                    <div
+                      className="border rounded overflow-hidden"
+                      style={{ height: "100px" }}
+                    >
                       <img
                         src={URL.createObjectURL(photo)}
                         alt={`upload-${index}`}
@@ -234,18 +249,32 @@ const ProfilePage = () => {
                 ))}
               </Row>
 
-              <Form onSubmit={handleSubmitPublish(onPublishDesign)} style={{ maxWidth: "500px" }}>
+              <Form
+                onSubmit={handleSubmitPublish(onPublishDesign)}
+                style={{ maxWidth: "500px" }}
+              >
                 <Form.Group className="mb-3" controlId="title">
                   <Form.Label>Title</Form.Label>
-                  <Form.Control {...registerPublish("title")} isInvalid={!!publishErrors.title} />
+                  <Form.Control
+                    {...registerPublish("title")}
+                    isInvalid={!!publishErrors.title}
+                  />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="description">
                   <Form.Label>Description</Form.Label>
-                  <Form.Control as="textarea" rows={3} {...registerPublish("description")} />
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    {...registerPublish("description")}
+                  />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="technology">
                   <Form.Label>Technology</Form.Label>
-                  <Form.Control placeholder="FDM, Resin..." {...registerPublish("technology")} isInvalid={!!publishErrors.technology} />
+                  <Form.Control
+                    placeholder="FDM, Resin..."
+                    {...registerPublish("technology")}
+                    isInvalid={!!publishErrors.technology}
+                  />
                 </Form.Group>
                 <Form.Group className="mb-4" controlId="price">
                   <Form.Label>Price (€)</Form.Label>
@@ -270,9 +299,16 @@ const ProfilePage = () => {
                 <p className="text-muted">No purchases yet.</p>
               ) : (
                 orders.map((order) => (
-                  <div key={order.id} className="d-flex justify-content-between border-bottom py-2">
-                    <span>Order #{order.id} ({order.status})</span>
-                    <span className="text-muted">{order.total.toFixed(2)} €</span>
+                  <div
+                    key={order.id}
+                    className="d-flex justify-content-between border-bottom py-2"
+                  >
+                    <span>
+                      Order #{order.id} ({order.status})
+                    </span>
+                    <span className="text-muted">
+                      {order.total.toFixed(2)} €
+                    </span>
                   </div>
                 ))
               )}

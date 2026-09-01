@@ -27,6 +27,7 @@ public class DesignController {
     public DesignResponseDTO getDesignById(@PathVariable Long id) {
         return designService.getDesignById(id);
     }
+
     @PostMapping(consumes = "multipart/form-data")
     public DesignResponseDTO createDesign(
             @RequestParam String title,

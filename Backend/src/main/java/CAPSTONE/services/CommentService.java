@@ -52,7 +52,7 @@ public class CommentService {
         return toResponse(saved);
     }
 
-     void recalculateDesignRating(Design design) {
+    void recalculateDesignRating(Design design) {
         List<Comment> comments = commentRepository.findByDesignId(design.getId());
         double average = comments.stream()
                 .mapToInt(Comment::getRating)

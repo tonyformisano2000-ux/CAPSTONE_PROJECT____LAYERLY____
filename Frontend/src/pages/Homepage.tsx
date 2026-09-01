@@ -1,14 +1,14 @@
-import CatalogComponent from "../components/HomepageComponents/CatalogComponent"
-import DesignersComponent from "../components/HomepageComponents/DesignersComponent"
-import HeroComponent from "../components/HomepageComponents/HeroComponent"
+import CatalogComponent from "../components/HomepageComponents/CatalogComponent";
+import DesignersComponent from "../components/HomepageComponents/DesignersComponent";
+import HeroComponent from "../components/HomepageComponents/HeroComponent";
 
-const Homepage=()=>{
-    return (
+const Homepage = () => {
+  return (
     <>
-    <HeroComponent/>
-        <CatalogComponent/>
-        <DesignersComponent/>
-        </>
-    )
-}
-export default Homepage
+      <HeroComponent />
+      <CatalogComponent />
+      <DesignersComponent />
+    </>
+  );
+};
+export default Homepage;

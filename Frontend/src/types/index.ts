@@ -15,7 +15,7 @@ export interface User {
   tags?: string[];
   stripeCustomerId?: string;
   createdAt: string;
-designsIds?:string[];
+  designsIds?: string[];
   iban?: string;
   designerLevel?: DesignerLevel;
 }
@@ -67,24 +67,24 @@ export interface CartItem {
   priceSnapshot: number;
 }
 
-export interface MainAction{
-    type:string;
-    payload?:unknown;
+export interface MainAction {
+  type: string;
+  payload?: unknown;
 }
 
-export interface Mainstate{
-    main:{
-        count:number;
-    }
+export interface Mainstate {
+  main: {
+    count: number;
+  };
 }
 
-export interface CartContentState{
-  content:Array<CartItem>;
+export interface CartContentState {
+  content: Array<CartItem>;
 }
 
-export interface CartAction{
-  type:string,
-  payload?:string;
+export interface CartAction {
+  type: string;
+  payload?: string;
 }
 
 export interface AuthState {
@@ -100,7 +100,7 @@ export interface AuthState {
 
 export interface AuthAction {
   type: string;
-  payload?: { token: string; user: AuthState['user'] };
+  payload?: { token: string; user: AuthState["user"] };
 }
 
 export interface RootState {

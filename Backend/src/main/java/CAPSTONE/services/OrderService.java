@@ -1,7 +1,10 @@
 package CAPSTONE.services;
 
 import CAPSTONE.dto.OrderResponseDTO;
-import CAPSTONE.entities.*;
+import CAPSTONE.entities.Design;
+import CAPSTONE.entities.Order;
+import CAPSTONE.entities.OrderItem;
+import CAPSTONE.entities.User;
 import CAPSTONE.enums.OrderStatus;
 import CAPSTONE.exceptions.ResourceNotFoundException;
 import CAPSTONE.repositories.DesignRepository;

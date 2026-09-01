@@ -27,4 +27,5 @@ public class OrderItem {
     private Design design;
 
     @Column(nullable = false)
-    private Double priceAtPurchase;}
+    private Double priceAtPurchase;
+}

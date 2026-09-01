@@ -1,4 +1,5 @@
 package CAPSTONE.entities;
+
 import CAPSTONE.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;

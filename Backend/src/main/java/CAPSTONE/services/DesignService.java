@@ -4,7 +4,6 @@ import CAPSTONE.dto.DesignResponseDTO;
 import CAPSTONE.entities.Design;
 import CAPSTONE.entities.User;
 import CAPSTONE.exceptions.ResourceNotFoundException;
-import CAPSTONE.repositories.UserRepository;
 import CAPSTONE.repositories.DesignRepository;
 import CAPSTONE.repositories.UserRepository;
 import com.cloudinary.Cloudinary;
@@ -65,6 +64,7 @@ public class DesignService {
         dto.setTags(design.getTags());
         return dto;
     }
+
     @Autowired
     private Cloudinary cloudinary;
 

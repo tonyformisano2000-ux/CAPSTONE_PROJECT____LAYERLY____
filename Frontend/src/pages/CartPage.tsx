@@ -1,7 +1,7 @@
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router";
-import type { RootState } from "../redux/store";
+import type { RootState } from "../types/index";
 import { mockDesigns } from "../mockData/mockDesigns";
 import { removeFromCartAction } from "../redux/actions";
 
@@ -13,15 +13,15 @@ const CartPage = () => {
   const total = content.reduce((sum, item) => sum + item.priceSnapshot, 0);
 
   const handleRemove = (designId: string) => {
-    dispatch(removeFromCartAction (designId) );
+    dispatch(removeFromCartAction(designId));
   };
 
   if (content.length === 0) {
     return (
       <Container className="mt-5 text-center">
         <h1>your cart is empty!</h1>
-        <Link to="/catalog" className="btn btn-primary mt-3">
-          See Catalog
+        <Link to="/" className="btn btn-primary mt-3">
+        Go back to Homepage
         </Link>
       </Container>
     );
@@ -35,7 +35,10 @@ const CartPage = () => {
         const design = mockDesigns.find((d) => d.id === item.designId);
 
         return (
-          <Row key={item.designId} className="align-items-center border-bottom py-3">
+          <Row
+            key={item.designId}
+            className="align-items-center border-bottom py-3"
+          >
             <Col xs={2} md={1}>
               <img
                 src={design?.photoUrls[0]}
@@ -45,13 +48,19 @@ const CartPage = () => {
               />
             </Col>
             <Col xs={6} md={7}>
-              <p className="mb-0 fw-medium">{design?.title ?? "Design non trovato"}</p>
+              <p className="mb-0 fw-medium">
+                {design?.title ?? "Design non trovato"}
+              </p>
             </Col>
             <Col xs={2} md={2} className="text-end">
               {item.priceSnapshot.toFixed(2)} €
             </Col>
             <Col xs={2} md={2} className="text-end">
-              <Button variant="outline-danger" size="sm" onClick={() => handleRemove(item.designId)}>
+              <Button
+                variant="outline-danger"
+                size="sm"
+                onClick={() => handleRemove(item.designId)}
+              >
                 <i className="bi bi-trash"></i>
               </Button>
             </Col>

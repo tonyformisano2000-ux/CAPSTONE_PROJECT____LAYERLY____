@@ -15,7 +15,9 @@ const LibraryPage = () => {
   const [activeTab, setActiveTab] = useState<LibraryTab>("saved");
 
   const designsToShow = mockDesigns.filter((design) =>
-    activeTab === "saved" ? mockSavedIds.includes(design.id) : mockPurchasedIds.includes(design.id)
+    activeTab === "saved"
+      ? mockSavedIds.includes(design.id)
+      : mockPurchasedIds.includes(design.id),
   );
 
   return (
@@ -24,12 +26,18 @@ const LibraryPage = () => {
 
       <Nav variant="tabs" className="mb-4">
         <Nav.Item>
-          <Nav.Link active={activeTab === "saved"} onClick={() => setActiveTab("saved")}>
+          <Nav.Link
+            active={activeTab === "saved"}
+            onClick={() => setActiveTab("saved")}
+          >
             Saved
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link active={activeTab === "purchased"} onClick={() => setActiveTab("purchased")}>
+          <Nav.Link
+            active={activeTab === "purchased"}
+            onClick={() => setActiveTab("purchased")}
+          >
             Purchased
           </Nav.Link>
         </Nav.Item>
@@ -37,13 +45,18 @@ const LibraryPage = () => {
 
       {designsToShow.length === 0 ? (
         <p className="text-muted">
-          {activeTab === "saved" ? "You haven't saved any design yet." : "You haven't purchased any design yet."}
+          {activeTab === "saved"
+            ? "You haven't saved any design yet."
+            : "You haven't purchased any design yet."}
         </p>
       ) : (
         <Row className="g-3">
           {designsToShow.map((design) => (
             <Col key={design.id} xs={6} md={4} lg={3}>
-              <Link to={`/details/${design.id}`} className="text-decoration-none text-reset">
+              <Link
+                to={`/details/${design.id}`}
+                className="text-decoration-none text-reset"
+              >
                 <div className="border rounded overflow-hidden h-100">
                   <img
                     src={design.photoUrls[0]}
@@ -52,7 +65,9 @@ const LibraryPage = () => {
                     style={{ height: "120px" }}
                   />
                   <div className="p-2">
-                    <p className="small fw-medium mb-0 text-truncate">{design.title}</p>
+                    <p className="small fw-medium mb-0 text-truncate">
+                      {design.title}
+                    </p>
                   </div>
                 </div>
               </Link>

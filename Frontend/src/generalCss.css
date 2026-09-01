@@ -1,7 +1,7 @@
 .multiline-truncate {
   overflow: hidden;
   position: relative;
-  max-height: 4.5em; 
+  max-height: 4.5em;
   mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
 }

@@ -27,7 +27,12 @@ public class OrderController {
     public static class CreateOrderRequest {
         private List<Long> designIds;
 
-        public List<Long> getDesignIds() { return designIds; }
-        public void setDesignIds(List<Long> designIds) { this.designIds = designIds; }
+        public List<Long> getDesignIds() {
+            return designIds;
+        }
+
+        public void setDesignIds(List<Long> designIds) {
+            this.designIds = designIds;
+        }
     }
 }

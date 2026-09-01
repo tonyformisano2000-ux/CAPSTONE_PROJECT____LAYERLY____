@@ -3,14 +3,14 @@ import { Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import apiFetch from "../../api/apiClient";
 import type { User } from "../../types";
-import "../../generalCss.css"
+import "../../generalCss.css";
 
 const DesignersComponent = () => {
   const navigate = useNavigate();
   const [designers, setDesigners] = useState<User[]>([]);
 
   useEffect(() => {
-    apiFetch('/users')
+    apiFetch("/users")
       .then((allUsers: User[]) => {
         setDesigners(allUsers.filter((u) => u.role === "DESIGNER").slice(0, 6));
       })
@@ -28,8 +28,13 @@ const DesignersComponent = () => {
               className="btn d-flex flex-column justify-content-center align-items-start col-lg-2 col-sm-4 mt-4"
               onClick={() => navigate(`/designer/${designer.id}`)}
             >
-              <img src={designer.profilePhotoUrl} className="object-fit-cover rounded-circle" />
-              <h3 className="text-center">{designer.firstName} {designer.lastName}</h3>
+              <img
+                src={designer.profilePhotoUrl}
+                className="object-fit-cover rounded-circle"
+              />
+              <h3 className="text-center">
+                {designer.firstName} {designer.lastName}
+              </h3>
               {designer.designerLevel === "AMATEUR" ? (
                 <p className="text-center">Amatorial designer</p>
               ) : (

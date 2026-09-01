@@ -16,9 +16,11 @@ const DesignerPage = () => {
       .then(setDesigner)
       .catch((err) => console.error(err));
 
-    apiFetch('/designs')
+    apiFetch("/designs")
       .then((allDesigns: Design[]) => {
-        const filtered = allDesigns.filter((d) => d.designerId === id).slice(0, 6);
+        const filtered = allDesigns
+          .filter((d) => d.designerId === id)
+          .slice(0, 6);
         setDesignerDesigns(filtered);
       })
       .catch((err) => console.error(err));
@@ -70,8 +72,16 @@ const DesignerPage = () => {
                 </span>
               )}
               {designer.designerLevel && (
-                <Badge bg={designer.designerLevel === "PROFESSIONAL" ? "primary" : "secondary"}>
-                  {designer.designerLevel === "PROFESSIONAL" ? "Designer professionale" : "Designer amatoriale"}
+                <Badge
+                  bg={
+                    designer.designerLevel === "PROFESSIONAL"
+                      ? "primary"
+                      : "secondary"
+                  }
+                >
+                  {designer.designerLevel === "PROFESSIONAL"
+                    ? "Designer professionale"
+                    : "Designer amatoriale"}
                 </Badge>
               )}
             </div>
@@ -88,7 +98,10 @@ const DesignerPage = () => {
           <Row className="g-3">
             {designerDesigns.map((design) => (
               <Col key={design.id} xs={6} md={4} lg={3}>
-                <Link to={`/details/${design.id}`} className="text-decoration-none text-reset">
+                <Link
+                  to={`/details/${design.id}`}
+                  className="text-decoration-none text-reset"
+                >
                   <div className="border rounded overflow-hidden h-100">
                     <img
                       src={design.photoUrls[0]}
@@ -97,7 +110,9 @@ const DesignerPage = () => {
                       style={{ height: "100px" }}
                     />
                     <div className="p-2">
-                      <p className="small fw-medium mb-1 text-truncate">{design.title}</p>
+                      <p className="small fw-medium mb-1 text-truncate">
+                        {design.title}
+                      </p>
                       <div className="d-flex justify-content-between align-items-center small text-muted">
                         <span>
                           <i className="bi bi-star-fill text-warning me-1"></i>
