@@ -23,13 +23,20 @@ const registerZod = z
       .trim()
       .min(2, "At least 2 characters required")
       .nonempty("empty field"),
-    email: z.email("invalid email").trim().nonempty("empty field"),
+    // il trim va PRIMA della validazione, altrimenti uno spazio iniziale o
+    // finale fa fallire un indirizzo valido
+    email: z
+      .string()
+      .trim()
+      .min(1, "empty field")
+      .pipe(z.email("invalid email")),
     pw: z
       .string()
       .min(6, "Password must be at least 6 characters")
       .trim()
       .nonempty("empty field"),
     confirmPw: z.string().trim().nonempty("empty field"),
+    role: z.enum(["CUSTOMER", "DESIGNER"]),
   })
   .refine((data) => data.pw === data.confirmPw, {
     message: "Passwords don't match",
@@ -46,6 +53,7 @@ const RegisterMode = ({ modeSetter }: RegisterProps) => {
     formState: { errors },
   } = useForm<registerFormData>({
     resolver: zodResolver(registerZod),
+    defaultValues: { role: "CUSTOMER" },
   });
 
   const onSubmit = async (data: registerFormData) => {
@@ -57,13 +65,18 @@ const RegisterMode = ({ modeSetter }: RegisterProps) => {
           lastName: data.lastName,
           email: data.email,
           password: data.pw,
-          role: "CUSTOMER",
+          role: data.role,
         }),
       });
       dispatch(loginSuccessAction(result.token, result.user));
       navigate("/");
     } catch (err) {
       console.error(err);
+      alert(
+        `Registration failed: ${
+          err instanceof Error ? err.message : "unknown error"
+        }`,
+      );
     }
   };
 
@@ -93,6 +106,13 @@ const RegisterMode = ({ modeSetter }: RegisterProps) => {
             {...register("email")}
             isInvalid={!!errors.email}
           ></Form.Control>
+        </Form.Group>
+        <Form.Group controlId="formGridRole" className="mb-3">
+          <Form.Label>Account type</Form.Label>
+          <Form.Select {...register("role")} isInvalid={!!errors.role}>
+            <option value="CUSTOMER">Customer — buy and download designs</option>
+            <option value="DESIGNER">Designer — publish your own designs</option>
+          </Form.Select>
         </Form.Group>
         <Form.Group controlId="formGridPassword" className="mb-3">
           <Form.Label>Password</Form.Label>

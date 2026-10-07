@@ -60,7 +60,7 @@ const OrderConfirmationPage = () => {
       </div>
 
       <div className="d-flex gap-2 justify-content-center">
-        <Link to="/catalog" className="btn btn-primary">
+        <Link to="/" className="btn btn-primary">
           Keep exploring
         </Link>
       </div>

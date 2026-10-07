@@ -3,6 +3,7 @@ import { Container, Row, Col, Badge } from "react-bootstrap";
 import { useParams, Link } from "react-router";
 import apiFetch from "../api/apiClient";
 import type { Design, User } from "../types";
+import defaultAvatar from "../assets/Sample_User_Icon.png";
 
 const DesignerPage = () => {
   const { id } = useParams();
@@ -18,8 +19,10 @@ const DesignerPage = () => {
 
     apiFetch("/designs")
       .then((allDesigns: Design[]) => {
+        // designerId arriva come numero, useParams restituisce una stringa:
+        // senza conversione il confronto stretto e' sempre falso
         const filtered = allDesigns
-          .filter((d) => d.designerId === id)
+          .filter((d) => String(d.designerId) === String(id))
           .slice(0, 6);
         setDesignerDesigns(filtered);
       })
@@ -29,7 +32,7 @@ const DesignerPage = () => {
   if (!designer) {
     return (
       <Container className="mt-5">
-        <h1>Designer non trovato</h1>
+        <h1>Designer not found</h1>
       </Container>
     );
   }
@@ -48,8 +51,7 @@ const DesignerPage = () => {
         />
         <Container className="border rounded-4">
           <img
-            src={designer.profilePhotoUrl}
-            alt={`${designer.firstName} ${designer.lastName}`}
+            src={designer.profilePhotoUrl || defaultAvatar}
             className="rounded-circle border border-4 border-white"
             style={{
               width: "120px",
@@ -80,8 +82,8 @@ const DesignerPage = () => {
                   }
                 >
                   {designer.designerLevel === "PROFESSIONAL"
-                    ? "Designer professionale"
-                    : "Designer amatoriale"}
+                    ? "Professional designer"
+                    : "Amateur designer"}
                 </Badge>
               )}
             </div>
@@ -90,10 +92,10 @@ const DesignerPage = () => {
       </div>
 
       <Container className="my-4">
-        <h2 className="h4 mb-3">Design pubblicati</h2>
+        <h2 className="h4 mb-3">Published designs</h2>
 
         {designerDesigns.length === 0 ? (
-          <p className="text-muted">Nessun design pubblicato ancora.</p>
+          <p className="text-muted">No designs published yet.</p>
         ) : (
           <Row className="g-3">
             {designerDesigns.map((design) => (

@@ -65,6 +65,8 @@ export interface OrderItem {
 export interface CartItem {
   designId: string;
   priceSnapshot: number;
+  title?: string;
+  photoUrl?: string;
 }
 
 export interface MainAction {
@@ -84,7 +86,7 @@ export interface CartContentState {
 
 export interface CartAction {
   type: string;
-  payload?: string;
+  payload?: string | CartItem;
 }
 
 export interface AuthState {
@@ -95,12 +97,13 @@ export interface AuthState {
     lastName: string;
     email: string;
     role: UserRole;
+    profilePhotoUrl?: string;
   } | null;
 }
 
 export interface AuthAction {
   type: string;
-  payload?: { token: string; user: AuthState["user"] };
+  payload?: { token: string; user: AuthState["user"] } | AuthState["user"];
 }
 
 export interface RootState {

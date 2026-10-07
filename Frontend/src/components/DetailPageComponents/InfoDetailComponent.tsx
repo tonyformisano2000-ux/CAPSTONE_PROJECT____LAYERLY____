@@ -1,6 +1,8 @@
-import type { Design } from "../../types";
+import type { Design, RootState } from "../../types";
 import { Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCartAction, removeFromCartAction } from "../../redux/actions";
 
 interface DesignProp {
   design: Design;
@@ -8,6 +10,9 @@ interface DesignProp {
 
 const InfoDetailComponent = ({ design }: DesignProp) => {
   const published = design.publishedAt.split("-");
+  const dispatch = useDispatch();
+  const inTheCart = useSelector((state: RootState) => state.cart.content);
+  const isInCart = inTheCart.some((item) => item.designId === design.id);
   return (
     <>
       <Row className="ms-4 mt-3 d-flex flex-column">
@@ -38,7 +43,23 @@ const InfoDetailComponent = ({ design }: DesignProp) => {
         </Row>
         <Row className="my-3 d-flex justify-content-between">
           <h3>Price: {design.price.toFixed(2)}€</h3>
-          <Button className="btn btn-lg ">Download</Button>
+          <Button
+            className="btn btn-lg d-flex align-items-center gap-2"
+            onClick={() =>
+              dispatch(
+                isInCart
+                  ? removeFromCartAction(design.id)
+                  : addToCartAction(design)
+              )
+            }
+          >
+            <i
+              className={`bi ${
+                isInCart ? "bi-plus-circle-fill" : "bi-plus-circle"
+              } fs-5`}
+            />
+            {isInCart ? "Remove from cart" : "Add to cart"}
+          </Button>
         </Row>
       </Row>
     </>

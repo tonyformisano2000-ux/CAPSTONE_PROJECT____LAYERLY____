@@ -3,20 +3,19 @@ package CAPSTONE.services;
 import CAPSTONE.dto.DesignResponseDTO;
 import CAPSTONE.entities.Design;
 import CAPSTONE.entities.User;
+import CAPSTONE.exceptions.ConflictException;
+import CAPSTONE.exceptions.ForbiddenOperationException;
 import CAPSTONE.exceptions.ResourceNotFoundException;
 import CAPSTONE.repositories.DesignRepository;
+import CAPSTONE.repositories.OrderItemRepository;
 import CAPSTONE.repositories.UserRepository;
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class DesignService {
@@ -25,7 +24,7 @@ public class DesignService {
     private DesignRepository designRepository;
 
     public List<DesignResponseDTO> getAllDesigns() {
-        return designRepository.findAll()
+        return designRepository.findAllByOrderByPublishedAtDesc()
                 .stream()
                 .map(this::toResponse)
                 .toList();
@@ -39,7 +38,7 @@ public class DesignService {
 
     // Esempio del .filter().map() esplicito per la checklist curriculum
     public List<DesignResponseDTO> getDesignsByTechnology(String technology) {
-        return designRepository.findAll()
+        return designRepository.findAllByOrderByPublishedAtDesc()
                 .stream()
                 .filter(design -> design.getTechnology().equalsIgnoreCase(technology))
                 .map(this::toResponse)
@@ -66,17 +65,20 @@ public class DesignService {
     }
 
     @Autowired
-    private Cloudinary cloudinary;
+    private CloudinaryService cloudinaryService;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
     public DesignResponseDTO createDesign(String title, String subtitle, String technology,
                                           String description, Double price, List<MultipartFile> photos) {
         User currentUser = getCurrentAuthenticatedUser();
 
         List<String> uploadedUrls = photos.stream()
-                .map(this::uploadToCloudinary)
+                .map(cloudinaryService::uploadImage)
                 .toList();
 
         Design design = new Design();
@@ -86,6 +88,7 @@ public class DesignService {
         design.setDescription(description);
         design.setPrice(price);
         design.setPhotoUrls(uploadedUrls);
+        design.setRating(0.0);
         design.setDesigner(currentUser);
         design.setPublishedAt(LocalDateTime.now());
         design.setStlFileUrl(""); // TODO: gestione upload STL separata se necessario
@@ -94,13 +97,23 @@ public class DesignService {
         return toResponse(saved);
     }
 
-    private String uploadToCloudinary(MultipartFile file) {
-        try {
-            Map<?, ?> result = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-            return result.get("secure_url").toString();
-        } catch (IOException e) {
-            throw new ResourceNotFoundException("Failed to upload image to Cloudinary");
+    public void deleteDesign(Long id) {
+        Design design = designRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Design not found with id: " + id));
+
+        User currentUser = getCurrentAuthenticatedUser();
+        if (!design.getDesigner().getId().equals(currentUser.getId())) {
+            throw new ForbiddenOperationException("You can only delete designs you published yourself");
         }
+
+        // order_items non ha ON DELETE CASCADE: senza questo controllo la cancellazione
+        // di un design gia' acquistato fallirebbe con una violazione di chiave esterna
+        if (orderItemRepository.existsByDesignId(id)) {
+            throw new ConflictException(
+                    "This design cannot be deleted because it is part of orders already placed");
+        }
+
+        designRepository.delete(design);
     }
 
     private User getCurrentAuthenticatedUser() {

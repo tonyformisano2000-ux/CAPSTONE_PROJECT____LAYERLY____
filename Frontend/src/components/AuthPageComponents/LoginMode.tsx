@@ -1,4 +1,5 @@
-import { Button, Col, Form } from "react-bootstrap";
+import { Button, Col, Form, Alert } from "react-bootstrap";
+import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,7 +13,13 @@ interface LoginProps {
 }
 
 const loginZod = z.object({
-  email: z.email("invalid email").trim().nonempty("empty field"),
+  // il trim va PRIMA della validazione: altrimenti uno spazio incollato
+  // insieme all'indirizzo lo fa risultare "invalid email"
+  email: z
+    .string()
+    .trim()
+    .min(1, "empty field")
+    .pipe(z.email("invalid email")),
   pw: z.string("invalid charts detected").trim().nonempty("empty field"),
 });
 
@@ -22,12 +29,16 @@ const LoginMode = ({ modeSetter }: LoginProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    resetField,
+    setFocus,
+    formState: { errors, isSubmitting },
   } = useForm<loginFormData>({ resolver: zodResolver(loginZod) });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   const onSubmit = async (data: loginFormData) => {
+    setLoginError(null);
     try {
       const result = await apiFetch("/auth/login", {
         method: "POST",
@@ -37,6 +48,12 @@ const LoginMode = ({ modeSetter }: LoginProps) => {
       navigate("/");
     } catch (err) {
       console.error(err);
+      setLoginError(
+        err instanceof Error ? err.message : "Could not complete the login",
+      );
+      // svuoto solo la password: l'email resta cos'i' da poter ritentare
+      resetField("pw");
+      setFocus("pw");
     }
   };
 
@@ -46,23 +63,40 @@ const LoginMode = ({ modeSetter }: LoginProps) => {
       <h1>Welcome back</h1>
       <p className=" text-dark">Log in to your Layerly account</p>
       <Form onSubmit={handleSubmit(onSubmit)} className="w-75">
+        {loginError && (
+          <Alert
+            variant="danger"
+            onClose={() => setLoginError(null)}
+            dismissible
+            className="py-2"
+          >
+            <i className="bi bi-exclamation-triangle me-2"></i>
+            {loginError}
+          </Alert>
+        )}
         <Form.Group controlId="formGridEmail" className="mb-3">
           <Form.Label>Email</Form.Label>
           <Form.Control
             {...register("email")}
             isInvalid={!!errors.email}
           ></Form.Control>
+          <Form.Control.Feedback type="invalid">
+            {errors.email?.message}
+          </Form.Control.Feedback>
         </Form.Group>
         <Form.Group controlId="formGridPassword" className="mb-4">
           <Form.Label>Password</Form.Label>
           <Form.Control
+            type="password"
             {...register("pw")}
             isInvalid={!!errors.pw}
           ></Form.Control>
+          <Form.Control.Feedback type="invalid">
+            {errors.pw?.message}
+          </Form.Control.Feedback>
         </Form.Group>
-        <Button className="w-100" type="submit">
-          {" "}
-          Log in
+        <Button className="w-100" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Logging in..." : "Log in"}
         </Button>
         <p className="mt-3 text-center">
           You don't have an account ?{" "}

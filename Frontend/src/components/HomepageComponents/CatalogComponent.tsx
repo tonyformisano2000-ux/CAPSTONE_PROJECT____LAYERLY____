@@ -68,7 +68,7 @@ const CatalogComponent = () => {
                   ) : (
                     <i
                       className="btn p-0 border-0 bi bi-plus-circle me-1 fs-4"
-                      onClick={() => dispatch(addToCartAction(design.id))}
+                      onClick={() => dispatch(addToCartAction(design))}
                     />
                   )}
                   <Link

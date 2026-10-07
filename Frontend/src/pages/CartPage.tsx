@@ -2,7 +2,6 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router";
 import type { RootState } from "../types/index";
-import { mockDesigns } from "../mockData/mockDesigns";
 import { removeFromCartAction } from "../redux/actions";
 
 const CartPage = () => {
@@ -32,8 +31,6 @@ const CartPage = () => {
       <h1 className="mb-4">My cart</h1>
 
       {content.map((item) => {
-        const design = mockDesigns.find((d) => d.id === item.designId);
-
         return (
           <Row
             key={item.designId}
@@ -41,15 +38,15 @@ const CartPage = () => {
           >
             <Col xs={2} md={1}>
               <img
-                src={design?.photoUrls[0]}
-                alt={design?.title}
+                src={item.photoUrl}
+                alt={item.title}
                 className="w-100 object-fit-cover rounded"
                 style={{ height: "60px" }}
               />
             </Col>
             <Col xs={6} md={7}>
               <p className="mb-0 fw-medium">
-                {design?.title ?? "Design non trovato"}
+                {item.title ?? "Design not found"}
               </p>
             </Col>
             <Col xs={2} md={2} className="text-end">
@@ -70,7 +67,7 @@ const CartPage = () => {
 
       <Row className="mt-4">
         <Col className="text-end">
-          <p className="fs-5 fw-bold">Totale: {total.toFixed(2)} €</p>
+          <p className="fs-5 fw-bold">Total: {total.toFixed(2)} €</p>
           <Button variant="primary" onClick={() => navigate("/payment")}>
             Pay & Download
           </Button>

@@ -3,6 +3,7 @@ package CAPSTONE.controllers;
 import CAPSTONE.dto.DesignResponseDTO;
 import CAPSTONE.services.DesignService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,5 +39,11 @@ public class DesignController {
             @RequestParam("photos") List<MultipartFile> photos
     ) {
         return designService.createDesign(title, subtitle, technology, description, price, photos);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteDesign(@PathVariable Long id) {
+        designService.deleteDesign(id);
     }
 }

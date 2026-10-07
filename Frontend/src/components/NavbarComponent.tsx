@@ -69,10 +69,9 @@ function NavbarComponent() {
               title={
                 <>
                   <img
-                    src={simpleUser}
-                    alt="userIcon"
-                    className="rounded-circle bg-secondary-subtle border border-secondary border-3"
-                    style={{ height: "30px", width: "auto" }}
+                    src={user?.profilePhotoUrl || simpleUser}
+                    className="rounded-circle bg-secondary-subtle border border-secondary border-3 object-fit-cover"
+                    style={{ height: "30px", width: "30px" }}
                   />
                   {user && <span className="ms-2 small">{user.firstName}</span>}
                 </>

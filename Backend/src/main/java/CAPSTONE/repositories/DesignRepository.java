@@ -9,4 +9,6 @@ public interface DesignRepository extends JpaRepository<Design, Long> {
     List<Design> findByDesignerId(Long designerId);
 
     List<Design> findByTechnology(String technology);
+
+    List<Design> findAllByOrderByPublishedAtDesc();
 }

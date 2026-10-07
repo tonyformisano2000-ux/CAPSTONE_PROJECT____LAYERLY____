@@ -64,52 +64,63 @@ public class DataSeeder implements CommandLineRunner {
         // ---- DESIGN ----
         Design d1 = createDesign("Vaso geometrico voronoi", "Design parametrico a bassa infill",
                 giulia, "FDM", "Vaso decorativo stampabile senza supporti.",
-                List.of(placeholderPhoto("vase"), placeholderPhoto("pottery")),
+                List.of(COMMONS + "/thumb/f/f6/3D_PRINTED_VASE.jpg/960px-3D_PRINTED_VASE.jpg",
+                        COMMONS + "/thumb/0/04/3D_Printed_Vase.jpg/960px-3D_Printed_Vase.jpg",
+                        "https://katrinamonarco1983.wordpress.com/wp-content/uploads/2014/12/3d-printed-pot.jpg"),
                 6.99, List.of("casa", "decorativo"));
 
         Design d2 = createDesign("Miniatura drago articolato", null,
                 giulia, "Resin", "Drago snodabile stampabile in un solo pezzo, articolazioni print-in-place.",
-                List.of(placeholderPhoto("dragon"), placeholderPhoto("figurine")),
+                List.of(COMMONS + "/thumb/d/d0/Technology_3D_print_dragon.jpg/960px-Technology_3D_print_dragon.jpg",
+                        COMMONS + "/thumb/8/80/CSIRO_ScienceImage_1861_3D_Printed_Toothless_Dragon.jpg"
+                                + "/960px-CSIRO_ScienceImage_1861_3D_Printed_Toothless_Dragon.jpg",
+                        "https://cdn.mos.cms.futurecdn.net/v2/t:0,l:191,cw:1145,ch:859,q:80,w:1145"
+                                + "/6tAViADEWqP9m3nkqsjKgF.jpg"),
                 12.50, List.of("miniatura", "fantasy"));
 
         Design d3 = createDesign("Portachiavi logo custom", null,
                 luca, "FDM", "Portachiavi personalizzabile con logo a scelta.",
-                List.of(placeholderPhoto("keychain")),
+                List.of(COMMONS + "/4/45/Marvin_Keychain.jpeg"),
                 2.50, List.of("gadget", "personalizzabile"));
 
-        Design d4 = createDesign("Supporto cuffie da scrivania", "Design minimale con cable management",
-                luca, "FDM", "Supporto stabile con foro passacavi integrato.",
-                List.of(placeholderPhoto("headphones"), placeholderPhoto("desk")),
+        Design d4 = createDesign("Supporto cuffie a testa geometrica", "Reticolo triangolare stampato in un pezzo",
+                luca, "FDM", "Supporto per cuffie a forma di testa, struttura a reticolo leggera e stabile.",
+                List.of("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTATBWNNOkjkJjgpjzTGi-B"
+                        + "-gQvsnWfRmiB53p10lVAXuNPBNtJp_pNhu4&s=10"),
                 4.00, List.of("scrivania", "organizzazione"));
 
         Design d5 = createDesign("Ingranaggio planetario dimostrativo", null,
                 sara, "FDM", "Modello didattico di trasmissione planetaria, stampabile assemblato.",
-                List.of(placeholderPhoto("gears")),
+                List.of(COMMONS + "/thumb/d/d0/Triple_Gear.jpg/960px-Triple_Gear.jpg"),
                 9.99, List.of("meccanica", "didattico"));
 
         Design d6 = createDesign("Organizer da scrivania modulare", null,
                 davide, "FDM", "Set di 3 moduli impilabili per penne, cavi e appunti.",
-                List.of(placeholderPhoto("organizer")),
+                List.of(COMMONS + "/thumb/c/c6/Hyperboloid_Pen_Holder_%285874134092%29.jpg"
+                        + "/960px-Hyperboloid_Pen_Holder_%285874134092%29.jpg"),
                 5.50, List.of("scrivania", "modulare"));
 
         Design d7 = createDesign("Base per piante autoirrigante", "Sistema a stoppino integrato",
                 elena, "FDM", "Sottovaso con riserva d'acqua e stoppino in cotone.",
-                List.of(placeholderPhoto("plant"), placeholderPhoto("garden")),
+                List.of(COMMONS + "/thumb/4/49/3D_printed_flower_pots.jpg/960px-3D_printed_flower_pots.jpg",
+                        COMMONS + "/thumb/2/2c/Orange_3D-printed_vase_with_wilted_flower.jpg"
+                                + "/960px-Orange_3D-printed_vase_with_wilted_flower.jpg"),
                 7.99, List.of("giardinaggio", "sostenibile"));
 
         Design d8 = createDesign("Lampada geometrica a nido d'ape", null,
-                matteo, "Resin", "Paralume geometrico con pattern a nido d'ape, effetto luce diffusa.",
-                List.of(placeholderPhoto("lamp")),
+                matteo, "Resin", "Paralume dodecaedrico con pattern a nido d'ape, effetto luce diffusa.",
+                List.of("https://images.techadvisor.com/cmsdata/features/3433170/3D-print-by-Makerbot-1_thumb.jpg"),
                 15.00, List.of("illuminazione", "design"));
 
-        Design d9 = createDesign("Scacchiera pieghevole magnetica", "Set completo con pezzi",
-                chiara, "FDM", "Scacchiera pieghevole con chiusura magnetica, include tutti i pezzi.",
-                List.of(placeholderPhoto("chess"), placeholderPhoto("boardgame")),
-                18.50, List.of("gioco", "regalo"));
+        Design d9 = createDesign("Cover smartphone con impronta", "Pattern personalizzabile con il tuo nome",
+                chiara, "FDM", "Cover rigida traforata con pattern a impronta digitale, nome inciso a richiesta.",
+                List.of("https://sc04.alicdn.com/kf/Hcaddff5fdc534feab623434778be2596V.jpg"),
+                18.50, List.of("gadget", "personalizzabile"));
 
         Design d10 = createDesign("Fioriera a spirale da esterno", null,
                 andrea, "FDM", "Fioriera decorativa a spirale, stampabile in un unico pezzo.",
-                List.of(placeholderPhoto("flowerpot")),
+                List.of(COMMONS + "/thumb/1/17/Screwable_Box_%285887976037%29.jpg"
+                        + "/960px-Screwable_Box_%285887976037%29.jpg"),
                 11.00, List.of("giardinaggio", "esterno"));
 
         // ---- COMMENT ----
@@ -132,9 +143,36 @@ public class DataSeeder implements CommandLineRunner {
         return "https://i.pravatar.cc/150?img=" + seed;
     }
 
-    private String placeholderPhoto(String keyword) {
-        return "https://loremflickr.com/600/400/" + keyword;
+    // Panorami (Wikimedia Commons, licenze libere) usati come copertina del profilo designer.
+    // Assegnati a rotazione nell'ordine di creazione, cosi' ogni designer ne ha uno diverso.
+    private static final List<String> PANORAMAS = List.of(
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/1_pano_cuiping_yangshuo_2016.jpg"
+                    + "/1920px-1_pano_cuiping_yangshuo_2016.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/2013_Rainbow_over_Washfold.jpg"
+                    + "/1920px-2013_Rainbow_over_Washfold.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/0/06"
+                    + "/2014_Yorkshire_Dales_country_road_Swaledale_Askrigg.jpg"
+                    + "/1920px-2014_Yorkshire_Dales_country_road_Swaledale_Askrigg.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/2013_Cogden_Bridge.jpg"
+                    + "/1920px-2013_Cogden_Bridge.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/2015_Swaledale_from_Kisdon_Hill.jpg"
+                    + "/1920px-2015_Swaledale_from_Kisdon_Hill.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/2015_Ribblehead_Viaduct_1.jpg"
+                    + "/1920px-2015_Ribblehead_Viaduct_1.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/2018_-_Ch%C3%A2teau_fort_de_Lourdes.jpg"
+                    + "/1920px-2018_-_Ch%C3%A2teau_fort_de_Lourdes.jpg",
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/2014_Track_on_Fremington_Edge.jpg"
+                    + "/1920px-2014_Track_on_Fremington_Edge.jpg");
+
+    private int panoramaCounter = 0;
+
+    private String nextPanorama() {
+        return PANORAMAS.get(panoramaCounter++ % PANORAMAS.size());
     }
+
+    // Foto reali di oggetti stampati in 3D da Wikimedia Commons (licenze libere).
+    // loremflickr restituiva immagini casuali e spesso scorrelate al design.
+    private static final String COMMONS = "https://upload.wikimedia.org/wikipedia/commons";
 
     private User createDesigner(String firstName, String lastName, String email, String passwordHash,
                                 String location, String photoUrl, DesignerLevel level) {
@@ -146,6 +184,7 @@ public class DataSeeder implements CommandLineRunner {
         user.setRole(UserRole.DESIGNER);
         user.setLocation(location);
         user.setProfilePhotoUrl(photoUrl);
+        user.setBackgroundPhotoUrl(nextPanorama());
         user.setDesignerLevel(level);
         user.setCreatedAt(LocalDateTime.now());
         return userRepository.save(user);

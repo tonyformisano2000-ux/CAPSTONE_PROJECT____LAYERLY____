@@ -5,7 +5,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../types/index";
-import { mockDesigns } from "../mockData/mockDesigns";
 import { useNavigate } from "react-router";
 import apiFetch from "../api/apiClient";
 import { emptyCartAction } from "../redux/actions";
@@ -144,13 +143,11 @@ const PaymentPage = () => {
           </Col>
 
           <Col className="col-6">
-            <h4>Riepilogo ordine</h4>
+            <h4>Order summary</h4>
             {cart.map((item) => {
-              const design = mockDesigns.find((d) => d.id === item.designId);
-
               return (
                 <Row key={item.designId} className="mb-2 align-items-center">
-                  <Col xs={8}>{design?.title ?? "Design non trovato"}</Col>
+                  <Col xs={8}>{item.title ?? "Design not found"}</Col>
                   <Col xs={4} className="text-end">
                     {item.priceSnapshot.toFixed(2)} €
                   </Col>
@@ -161,7 +158,7 @@ const PaymentPage = () => {
             <hr />
 
             <Row className="fw-bold">
-              <Col xs={8}>Totale</Col>
+              <Col xs={8}>Total</Col>
               <Col xs={4} className="text-end">
                 {total.toFixed(2)} €
               </Col>
