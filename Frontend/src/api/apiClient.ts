@@ -1,6 +1,8 @@
 import { store } from "../redux/store";
 
-const BASE_URL = "http://localhost:3220";
+// In produzione arriva da VITE_API_URL (impostata su Netlify, letta al momento della build).
+// Lo slash finale viene tolto perche' gli endpoint iniziano gia' con "/".
+const BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:3220").replace(/\/+$/, "");
 
 // Il backend risponde 403 anche quando il token e' scaduto o assente,
 // quindi il messaggio deve coprire entrambi i casi.

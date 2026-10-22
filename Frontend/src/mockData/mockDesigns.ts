@@ -6,6 +6,7 @@ export const mockDesigns: Design[] = [
     subtitle: "Design parametrico a bassa infill",
     publishedAt: "2026-05-10T12:00:00Z",
     designerId: "u2",
+    designerName: "Giulia Romano",
     technology: "FDM",
     stlFileUrl: "/mock-files/vaso-voronoi.stl",
     description:
@@ -29,6 +30,7 @@ export const mockDesigns: Design[] = [
     title: "Miniatura Drago Articolato",
     publishedAt: "2026-06-02T09:00:00Z",
     designerId: "u2",
+    designerName: "Giulia Romano",
     technology: "Resin",
     stlFileUrl: "/mock-files/drago-articolato.stl",
     description:
@@ -48,6 +50,7 @@ export const mockDesigns: Design[] = [
     title: "Portachiavi Logo Custom",
     publishedAt: "2026-06-15T16:30:00Z",
     designerId: "u3",
+    designerName: "Luca Ferri",
     technology: "FDM",
     stlFileUrl: "/mock-files/portachiavi.stl",
     photoUrls: ["https://picsum.photos/seed/porta1/600/400"],
@@ -61,6 +64,7 @@ export const mockDesigns: Design[] = [
     subtitle: "Design minimale con cable management",
     publishedAt: "2026-07-01T11:00:00Z",
     designerId: "u3",
+    designerName: "Luca Ferri",
     technology: "FDM",
     stlFileUrl: "/mock-files/supporto-cuffie.stl",
     description:
@@ -78,6 +82,7 @@ export const mockDesigns: Design[] = [
     title: "Ingranaggio Planetario Dimostrativo",
     publishedAt: "2026-07-18T08:45:00Z",
     designerId: "u2",
+    designerName: "Giulia Romano",
     technology: "FDM",
     stlFileUrl: "/mock-files/ingranaggio-planetario.stl",
     description:
@@ -94,6 +99,7 @@ export const mockDesigns: Design[] = [
     title: "Organizer da Scrivania Modulare",
     publishedAt: "2026-07-25T10:00:00Z",
     designerId: "u3",
+    designerName: "Luca Ferri",
     technology: "FDM",
     stlFileUrl: "/mock-files/organizer-modulare.stl",
     description:
@@ -109,6 +115,7 @@ export const mockDesigns: Design[] = [
     subtitle: "Sistema a stoppino integrato",
     publishedAt: "2026-07-28T14:00:00Z",
     designerId: "u2",
+    designerName: "Giulia Romano",
     technology: "FDM",
     stlFileUrl: "/mock-files/base-autoirrigante.stl",
     description:
