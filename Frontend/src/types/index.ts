@@ -1,3 +1,4 @@
+import type { UnknownAction } from "@reduxjs/toolkit";
 export type UserRole = "CUSTOMER" | "DESIGNER" | "ADMIN";
 export type DesignerLevel = "PROFESSIONAL" | "AMATEUR";
 export type OrderStatus = "PENDING" | "PAID" | "FAILED";
@@ -84,7 +85,7 @@ export interface CartContentState {
   content: Array<CartItem>;
 }
 
-export interface CartAction {
+export interface CartAction extends UnknownAction {
   type: string;
   payload?: string | CartItem;
 }
@@ -101,7 +102,7 @@ export interface AuthState {
   } | null;
 }
 
-export interface AuthAction {
+export interface AuthAction extends UnknownAction {
   type: string;
   payload?: { token: string; user: AuthState["user"] } | AuthState["user"];
 }
