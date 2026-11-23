@@ -4,7 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import apiFetch from "../../api/apiClient";
 import { loginSuccessAction } from "../../redux/actions/authActions";
 import Layerly_logo from "../../assets/LAYERLY_logo.png";
@@ -35,6 +35,9 @@ const LoginMode = ({ modeSetter }: LoginProps) => {
   } = useForm<loginFormData>({ resolver: zodResolver(loginZod) });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  // pagina da cui si e' arrivati al login (es. il pagamento), passata nello state
+  const from = (location.state as { from?: string } | null)?.from ?? "/";
   const [loginError, setLoginError] = useState<string | null>(null);
 
   const onSubmit = async (data: loginFormData) => {
@@ -45,7 +48,7 @@ const LoginMode = ({ modeSetter }: LoginProps) => {
         body: JSON.stringify({ email: data.email, password: data.pw }),
       });
       dispatch(loginSuccessAction(result.token, result.user));
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (err) {
       console.error(err);
       setLoginError(

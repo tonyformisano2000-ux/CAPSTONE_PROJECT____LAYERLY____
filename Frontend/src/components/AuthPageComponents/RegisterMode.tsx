@@ -3,7 +3,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import apiFetch from "../../api/apiClient";
 import { loginSuccessAction } from "../../redux/actions/authActions";
 import Layerly_logo from "../../assets/LAYERLY_logo.png";
@@ -47,6 +47,9 @@ type registerFormData = z.infer<typeof registerZod>;
 const RegisterMode = ({ modeSetter }: RegisterProps) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  // stesso state del login: AuthPage cambia solo componente, l'URL resta /login
+  const from = (location.state as { from?: string } | null)?.from ?? "/";
   const {
     register,
     handleSubmit,
@@ -69,7 +72,7 @@ const RegisterMode = ({ modeSetter }: RegisterProps) => {
         }),
       });
       dispatch(loginSuccessAction(result.token, result.user));
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (err) {
       console.error(err);
       alert(

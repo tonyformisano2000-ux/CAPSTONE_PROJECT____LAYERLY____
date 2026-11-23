@@ -1,5 +1,6 @@
 import { Container, Row, Col } from "react-bootstrap";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,23 +38,33 @@ const paymentZod = z.object({
 const PaymentPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const content = useSelector((state: RootState) => state.cart.content);
   const cart = useSelector((state: RootState) => state.cart.content);
+  const token = useSelector((state: RootState) => state.auth.token);
   const total = cart.reduce((sum, item) => sum + item.priceSnapshot, 0);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
   type PaymentFormData = z.infer<typeof paymentZod>;
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<PaymentFormData>({ resolver: zodResolver(paymentZod) });
   //                                 ^^^^^^^^^^^^^^^^^^
   // doppio deconstructor, dallggetto useForm prendi formState e da formstate prendi errors
 
-  const onSubmit = async (data: PaymentFormData) => {
-    console.log("Payment form submitted (mock):", data);
+  // si arriva qui anche scrivendo /payment a mano: senza token si torna al login.
+  // replace evita che "indietro" riporti su /payment e rifaccia il redirect
+  useEffect(() => {
+    if (!token) {
+      navigate("/login", { replace: true, state: { from: "/payment" } });
+    }
+  }, [token, navigate]);
+
+  // i dati del form non servono all'API: il pagamento e' simulato
+  const onSubmit = async () => {
+    setPaymentError(null);
     try {
-      const designIds = content.map((item) => item.designId);
-      const orderedItems = [...content];
+      const designIds = cart.map((item) => item.designId);
+      const orderedItems = [...cart];
 
       await apiFetch("/orders", {
         method: "POST",
@@ -64,8 +75,15 @@ const PaymentPage = () => {
       navigate("/orderConfirmation", { state: { items: orderedItems } });
     } catch (err) {
       console.error(err);
+      setPaymentError(
+        err instanceof Error ? err.message : "Could not complete the payment",
+      );
     }
   };
+
+  // evita di mostrare il form per un attimo prima del redirect
+  if (!token) return null;
+
   return (
     <>
       <Container>
@@ -73,6 +91,17 @@ const PaymentPage = () => {
           <Col className="col-6">
             <h1 className="text-center">Payment page</h1>
             <Form onSubmit={handleSubmit(onSubmit)}>
+              {paymentError && (
+                <Alert
+                  variant="danger"
+                  onClose={() => setPaymentError(null)}
+                  dismissible
+                  className="py-2"
+                >
+                  <i className="bi bi-exclamation-triangle me-2"></i>
+                  {paymentError}
+                </Alert>
+              )}
               <Row className="mb-3">
                 <Form.Group as={Col} controlId="formGridName">
                   <Form.Label>Insert your full name </Form.Label>
@@ -135,8 +164,13 @@ const PaymentPage = () => {
                 </Form.Group>
               </Row>
               <Row>
-                <Button variant="primary" type="submit" className="col-4">
-                  Submit and pay
+                <Button
+                  variant="primary"
+                  type="submit"
+                  className="col-4"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Processing..." : "Submit and pay"}
                 </Button>
               </Row>
             </Form>
