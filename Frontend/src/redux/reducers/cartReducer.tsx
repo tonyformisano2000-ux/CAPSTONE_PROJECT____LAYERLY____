@@ -1,5 +1,6 @@
 import type { CartAction, CartContentState } from "../../types";
 import { ADD_TO_CART, REMOVE_FROM_CART, EMPTY_CART } from "../actions";
+import { LOGOUT } from "../actions/authActions";
 
 const initialState: CartContentState = {
   content: [],
@@ -41,6 +42,9 @@ const cartReducer = (
         ...cartState,
         content: [],
       };
+    // LOGOUT: IL CARRELLO NON DEVE PASSARE AL PROSSIMO ACCOUNT
+    case LOGOUT:
+      return initialState;
     //  DEFAULT RESPONSE: NO CHANGES
     default:
       return cartState;
