@@ -185,6 +185,7 @@ Nota sull'email: `cazzo@cazzo.com` ha un **formato valido**. Nessuna validazione
 - Bottone commenti sulle card (le card portano già al dettaglio)
 - Freccia "indietro" o breadcrumb
 - Verifica dell'email in registrazione
+- Token scaduto: gestire 401/403 in apiClient con logout e redirect al login
 
 ---
 
@@ -304,9 +305,9 @@ Aggiornato a ogni sessione (✅ fatto · 🔄 in corso · ⬜ da fare).
 
 | ID | Stato | Branch / PR | Note |
 |---|---|---|---|
-| Sessione 0 | 🔄 | — | ✅ pulizia DB test (utente 13, 22 nov) · ⬜ issue B1/B2 · ⬜ commit del piano |
-| B1 | ⬜ | | checkout da ospite → login → ritorno al pagamento |
-| B2 | ⬜ | | svuotare il carrello al LOGOUT |
+| Sessione 0 | ✅ | — | pulizia DB test (utente 13), tag v1.0-capstone, piano committato, issue #1 #2 (23 nov) |
+| B1 (#1) | 🔄 | fix/guest-checkout · 03a7d95 | da testare in locale, poi push e PR |
+| B2 (#2) | 🔄 | fix/guest-checkout · 185478a | da testare in locale, poi push e PR |
 | B3 | ⬜ | | commenti e rating |
 | B4 | ⬜ | | PUT /users/me |
 | B5 | ⬜ | | Library e Purchase History |
@@ -315,6 +316,9 @@ Aggiornato a ogni sessione (✅ fatto · 🔄 in corso · ⬜ da fare).
 | B8 | ⬜ | | card cliccabili |
 | B9 | ⬜ | | footer, placeholder carta, testi in inglese |
 | B10 | ⬜ | | upload: spinner + messaggio |
+| B11 | ⬜ | | ordine con carrello vuoto: guard su /payment + validazione backend (400). Sessione 2 |
+| B12 | ⬜ | | 🔒 GET /orders/customer/{id}: chiunque loggato vede gli ordini altrui → GET /orders/me. Sessione 2 |
+| B13 | ⬜ | | 🔒 GET /users e /users/{id} pubblici restituiscono l'email di tutti → DTO pubblico senza email. Sessione 2 |
 | V1 | ⬜ | | Fill demo data |
 | V2 | ⬜ | | autocompilazione nome/email al pagamento |
 | V3–V10 | ⬜ | | stile e mobile (sessioni 5–6) |

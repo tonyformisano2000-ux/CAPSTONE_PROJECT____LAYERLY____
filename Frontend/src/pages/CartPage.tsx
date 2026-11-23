@@ -6,6 +6,7 @@ import { removeFromCartAction } from "../redux/actions";
 
 const CartPage = () => {
   const content = useSelector((state: RootState) => state.cart.content);
+  const token = useSelector((state: RootState) => state.auth.token);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -13,6 +14,15 @@ const CartPage = () => {
 
   const handleRemove = (designId: string) => {
     dispatch(removeFromCartAction(designId));
+  };
+
+  // da ospite si passa dal login: "from" riporta al pagamento, il carrello resta nello store
+  const handleCheckout = () => {
+    if (token) {
+      navigate("/payment");
+    } else {
+      navigate("/login", { state: { from: "/payment" } });
+    }
   };
 
   if (content.length === 0) {
@@ -68,7 +78,7 @@ const CartPage = () => {
       <Row className="mt-4">
         <Col className="text-end">
           <p className="fs-5 fw-bold">Total: {total.toFixed(2)} €</p>
-          <Button variant="primary" onClick={() => navigate("/payment")}>
+          <Button variant="primary" onClick={handleCheckout}>
             Pay & Download
           </Button>
         </Col>
