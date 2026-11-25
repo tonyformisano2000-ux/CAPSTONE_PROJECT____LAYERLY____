@@ -12,10 +12,12 @@ import ProfilePage from "./pages/ProfilePage";
 import NavbarComponent from "./components/NavbarComponent";
 import FooterComponent from "./components/FooterComponent";
 import DesignerPage from "./pages/DesignerPage";
+import ServerWakeUpBanner from "./components/ServerWakeUpBanner";
 function App() {
   return (
     <BrowserRouter>
       <div className="d-flex flex-column min-vh-100">
+        <ServerWakeUpBanner />
         <NavbarComponent />
         <main className="flex-grow-1">
           <Routes>
