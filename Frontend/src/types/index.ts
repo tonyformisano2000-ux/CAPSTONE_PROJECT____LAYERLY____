@@ -21,6 +21,17 @@ export interface User {
   designerLevel?: DesignerLevel;
 }
 
+// quello che restituiscono GET /users e GET /users/{id}: solo designer, senza email
+export interface PublicUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  profilePhotoUrl?: string;
+  backgroundPhotoUrl?: string;
+  location?: string;
+  designerLevel?: DesignerLevel;
+}
+
 export interface Design {
   id: string;
   title: string;

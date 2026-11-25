@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { Container, Row, Col, Badge } from "react-bootstrap";
 import { useParams, Link } from "react-router";
 import apiFetch from "../api/apiClient";
-import type { Design, User } from "../types";
+import type { Design, PublicUser } from "../types";
 import defaultAvatar from "../assets/Sample_User_Icon.png";
 
 const DesignerPage = () => {
   const { id } = useParams();
-  const [designer, setDesigner] = useState<User | null>(null);
+  const [designer, setDesigner] = useState<PublicUser | null>(null);
   const [designerDesigns, setDesignerDesigns] = useState<Design[]>([]);
 
   useEffect(() => {

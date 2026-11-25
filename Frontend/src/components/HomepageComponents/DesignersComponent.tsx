@@ -2,18 +2,19 @@ import { useState, useEffect } from "react";
 import { Container, Row, Col, Badge } from "react-bootstrap";
 import { Link } from "react-router";
 import apiFetch from "../../api/apiClient";
-import type { User } from "../../types";
+import type { PublicUser } from "../../types";
 import defaultAvatar from "../../assets/Sample_User_Icon.png";
 import "../../generalCss.css";
 
 const DesignersComponent = () => {
-  const [designers, setDesigners] = useState<User[]>([]);
+  const [designers, setDesigners] = useState<PublicUser[]>([]);
 
   useEffect(() => {
-    // /users arriva gia' ordinato dal piu' recente, quindi lo slice tiene i 6 nuovi
+    // /users restituisce solo designer, gia' ordinati dal piu' recente:
+    // lo slice tiene i 6 nuovi
     apiFetch("/users")
-      .then((allUsers: User[]) => {
-        setDesigners(allUsers.filter((u) => u.role === "DESIGNER").slice(0, 6));
+      .then((allDesigners: PublicUser[]) => {
+        setDesigners(allDesigners.slice(0, 6));
       })
       .catch((err) => console.error(err));
   }, []);
