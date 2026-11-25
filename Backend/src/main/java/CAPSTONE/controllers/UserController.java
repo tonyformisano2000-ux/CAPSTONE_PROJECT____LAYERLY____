@@ -1,5 +1,6 @@
 package CAPSTONE.controllers;
 
+import CAPSTONE.dto.PublicUserDTO;
 import CAPSTONE.dto.UserResponseDTO;
 import CAPSTONE.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,13 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<UserResponseDTO> getAllUsers() {
-        return userService.getAllUsers();
+    public List<PublicUserDTO> getAllDesigners() {
+        return userService.getAllDesigners();
     }
 
     @GetMapping("/{id}")
-    public UserResponseDTO getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public PublicUserDTO getDesignerById(@PathVariable Long id) {
+        return userService.getDesignerById(id);
     }
 
     @PostMapping(value = "/me/photo", consumes = "multipart/form-data")

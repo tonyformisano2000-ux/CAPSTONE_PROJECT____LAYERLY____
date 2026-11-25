@@ -1,6 +1,7 @@
 package CAPSTONE.repositories;
 
 import CAPSTONE.entities.User;
+import CAPSTONE.enums.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,5 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
 
-    List<User> findAllByOrderByCreatedAtDesc();
+    List<User> findAllByRoleOrderByCreatedAtDesc(UserRole role);
+
+    Optional<User> findByIdAndRole(Long id, UserRole role);
 }

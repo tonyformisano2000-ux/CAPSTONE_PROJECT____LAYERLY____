@@ -1,7 +1,9 @@
 package CAPSTONE.services;
 
+import CAPSTONE.dto.PublicUserDTO;
 import CAPSTONE.dto.UserResponseDTO;
 import CAPSTONE.entities.User;
+import CAPSTONE.enums.UserRole;
 import CAPSTONE.exceptions.ResourceNotFoundException;
 import CAPSTONE.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +22,20 @@ public class UserService {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    // ordinati dal piu' recente, come i design: la homepage mostra i primi risultati
-    public List<UserResponseDTO> getAllUsers() {
-        return userRepository.findAllByOrderByCreatedAtDesc()
+    // ordinati dal piu' recente, come i design: la homepage mostra i primi risultati.
+    // Endpoint pubblico: solo designer (i clienti non hanno una pagina) e senza email
+    public List<PublicUserDTO> getAllDesigners() {
+        return userRepository.findAllByRoleOrderByCreatedAtDesc(UserRole.DESIGNER)
                 .stream()
-                .map(this::toResponse)
+                .map(this::toPublicResponse)
                 .toList();
     }
 
-    public UserResponseDTO getUserById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
-        return toResponse(user);
+    // l'id di un cliente risponde 404 come un id inesistente
+    public PublicUserDTO getDesignerById(Long id) {
+        User user = userRepository.findByIdAndRole(id, UserRole.DESIGNER)
+                .orElseThrow(() -> new ResourceNotFoundException("Designer not found with id: " + id));
+        return toPublicResponse(user);
     }
 
     // La foto si aggiorna sempre sull'utente autenticato: nessun id dal client,
@@ -55,6 +59,18 @@ public class UserService {
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
         dto.setRole(user.getRole().name());
+        dto.setProfilePhotoUrl(user.getProfilePhotoUrl());
+        dto.setBackgroundPhotoUrl(user.getBackgroundPhotoUrl());
+        dto.setLocation(user.getLocation());
+        dto.setDesignerLevel(user.getDesignerLevel() != null ? user.getDesignerLevel().name() : null);
+        return dto;
+    }
+
+    private PublicUserDTO toPublicResponse(User user) {
+        PublicUserDTO dto = new PublicUserDTO();
+        dto.setId(user.getId());
+        dto.setFirstName(user.getFirstName());
+        dto.setLastName(user.getLastName());
         dto.setProfilePhotoUrl(user.getProfilePhotoUrl());
         dto.setBackgroundPhotoUrl(user.getBackgroundPhotoUrl());
         dto.setLocation(user.getLocation());
